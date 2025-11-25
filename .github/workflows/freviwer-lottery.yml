@@ -1,0 +1,108 @@
+
+
+name: Reviewer lottery + Discord notify
+
+on:
+  pull_request_target:
+    types: [opened, ready_for_review, reopened]
+
+# 最小権限で reviewer 付与と通知のみ実行します。
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  assign_and_notify:
+    runs-on: ubuntu-latest
+    # fork PR では secrets が使えないため、同一リポ内 PR のみ実行します。
+    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
+
+    steps:
+      # pull_request_target は base 側のコードを checkout するのが安全です。
+      - name: Checkout base (safe)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+
+      # 2名をランダム選出して reviewer を付与します。
+      - name: Assign reviewers (lottery)
+        uses: uesteibar/reviewer-lottery@v3
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # 付与後の reviewer 一覧を API から取得します。
+      - name: Fetch PR info
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const number = context.payload.pull_request.number;
+            const { data } = await github.rest.pulls.get({ owner, repo, pull_number: number });
+            const reviewers = (data.requested_reviewers || []).map(r => r.login);
+            core.setOutput('reviewers', reviewers.join(', '));
+            core.setOutput('reviewers_count', String(reviewers.length));
+            core.setOutput('url', data.html_url);
+            core.setOutput('title', data.title);
+            core.setOutput('author', data.user.login);
+            core.setOutput('draft', String(data.draft));
+
+      # Discord へ通知します。
+      # secrets: DISCORD_REVIEW_WEBHOOK_URL を設定してください。
+      # repo内に .github/discord-reviewers.json を置くと個人メンションできます。
+      - name: Notify Discord (mention assigned reviewers)
+        if: ${{ steps.pr.outputs.draft != 'true' && steps.pr.outputs.reviewers_count != '0' }}
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_REVIEW_WEBHOOK_URL }}
+          PR_URL: ${{ steps.pr.outputs.url }}
+          PR_TITLE: ${{ steps.pr.outputs.title }}
+          PR_AUTHOR: ${{ steps.pr.outputs.author }}
+          REVIEWERS: ${{ steps.pr.outputs.reviewers }}
+        run: |
+          python3 - <<'PY'
+          import json, os, sys, urllib.request, pathlib
+
+          url = (os.getenv('DISCORD_WEBHOOK_URL') or '').strip()
+          if not url:
+            print('DISCORD_REVIEW_WEBHOOK_URL is empty; skip.')
+            sys.exit(0)
+
+          # GitHub login -> Discord user id の対応表
+          mpath = pathlib.Path('.github/discord-reviewers.json')
+          mapping = {}
+          if mpath.exists():
+            mapping = json.loads(mpath.read_text('utf-8'))
+
+          reviewers = [s.strip() for s in (os.getenv('REVIEWERS') or '').split(',') if s.strip()]
+
+          discord_ids = [mapping.get(r) for r in reviewers]
+          discord_ids = [d for d in discord_ids if d]
+
+          mentions = ' '.join([f"<@{d}>" for d in discord_ids])
+          fallback = ', '.join(reviewers)
+
+          lines = [
+            mentions,
+            f"PR: {os.getenv('PR_URL','')}",
+            f"Title: {os.getenv('PR_TITLE','')}",
+            f"Author: {os.getenv('PR_AUTHOR','')}",
+            f"Reviewers(GitHub): {fallback}",
+          ]
+          content = "\n".join([l for l in lines if l])
+
+          payload = {
+            "content": content,
+            # 誤爆防止：この投稿で許可する user mention を限定
+            "allowed_mentions": {"users": discord_ids, "parse": []}
+          }
+
+          data = json.dumps(payload).encode('utf-8')
+          req = urllib.request.Request(
+            url,
+            data=data,
+            headers={"Content-Type": "application/json"},
+            method='POST',
+          )
+          with urllib.request.urlopen(req) as resp:
+            print('Discord status:', resp.status)
+          PY
