@@ -1,0 +1,9 @@
+groups:
+  - name: devs
+    reviewers: 2
+    usernames:
+      - yuzu-juice
+      - sudolifeagain
+      - NakajiZaiLFC
+      - E233-3639
+      - pito-labs
