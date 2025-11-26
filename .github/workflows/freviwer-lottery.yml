@@ -90,10 +90,13 @@ Title: $PR_TITLE
 Author: $PR_AUTHOR
 Reviewers(GitHub): $fallback"
 
-          payload=$(jq -n \
-            --arg content "$content" \
-            --argjson users "$(printf '%s\n' $discord_ids | jq -R . | jq -s .)" \
-            '{content: $content, allowed_mentions: {users: $users, parse: []}}')
+          payload="$(
+            jq -n \
+              --arg content "$content" \
+              --argjson users "$(printf '%s\n' $discord_ids | jq -R . | jq -s .)" \
+              --argjson empty_array '[]' \
+              '$ARGS.named | {content: .content, allowed_mentions: {users: .users, parse: .empty_array}}'
+          )"
 
           curl -X POST \
             -H "Content-Type: application/json" \
