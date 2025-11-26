@@ -9,15 +9,15 @@ jobs:
   assign_and_notify:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout base (safe)
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.base.ref }}
-      
       - name: Assign reviewers (lottery)
         uses: uesteibar/reviewer-lottery@v3
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Checkout for Discord mapping
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
       
       - name: Fetch PR info
         id: pr
@@ -34,6 +34,22 @@ jobs:
             core.setOutput('title', data.title);
             core.setOutput('author', data.user.login);
             core.setOutput('draft', String(data.draft));
+      
+      - name: Debug Secret Value
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          python3 - <<'PY'
+          import os
+          url = os.getenv('DISCORD_WEBHOOK_URL', '')
+          print(f'=== SECRET DIAGNOSIS ===')
+          print(f'Length: {len(url)} chars')
+          print(f'Expected: 113 chars')
+          print(f'Starts: {repr(url[:50])}')
+          print(f'Ends: {repr(url[-20:])}')
+          print(f'Has spaces: {" " in url}')
+          print(f'Has newlines: {"\\n" in url or "\\r" in url}')
+          PY
       
       - name: Notify Discord (mention assigned reviewers)
         if: ${{ steps.pr.outputs.draft != 'true' && steps.pr.outputs.reviewers_count != '0' }}
