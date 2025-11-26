@@ -1,97 +1,62 @@
-name: Reviewer lottery + Discord notify
-
-on:
-  pull_request_target:
-    types: [opened, ready_for_review, reopened]
-
-permissions:
-  contents: read
-  pull-requests: write
-
-jobs:
-  assign_and_notify:
-    runs-on: ubuntu-latest
-
-    if: ${{ github.event.pull_request.head.repo.full_name == github.repository }}
-
-    steps:
-      - name: Checkout base (safe)
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.base.sha }}
-
-      - name: Assign reviewers (lottery)
-        uses: uesteibar/reviewer-lottery@v3
-        with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Fetch PR info
-        id: pr
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const { owner, repo } = context.repo;
-            const number = context.payload.pull_request.number;
-            const { data } = await github.rest.pulls.get({ owner, repo, pull_number: number });
-            const reviewers = (data.requested_reviewers || []).map(r => r.login);
-            core.setOutput('reviewers', reviewers.join(', '));
-            core.setOutput('reviewers_count', String(reviewers.length));
-            core.setOutput('url', data.html_url);
-            core.setOutput('title', data.title);
-            core.setOutput('author', data.user.login);
-            core.setOutput('draft', String(data.draft));
-
-      - name: Notify Discord (mention assigned reviewers)
-        if: ${{ steps.pr.outputs.draft != 'true' && steps.pr.outputs.reviewers_count != '0' }}
-        env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-          PR_URL: ${{ steps.pr.outputs.url }}
-          PR_TITLE: ${{ steps.pr.outputs.title }}
-          PR_AUTHOR: ${{ steps.pr.outputs.author }}
-          REVIEWERS: ${{ steps.pr.outputs.reviewers }}
-        run: |
-          python3 - <<'PY'
-          import json, os, sys, urllib.request, pathlib
-
-          url = (os.getenv('DISCORD_WEBHOOK_URL') or '').strip()
-          if not url:
-            print('DISCORD_REVIEW_WEBHOOK_URL is empty; skip.')
-            sys.exit(0)
-
-          # GitHub login -> Discord user id mapping
-          mpath = pathlib.Path('.github/discord-reviewers.json')
-          mapping = {}
-          if mpath.exists():
-            mapping = json.loads(mpath.read_text('utf-8'))
-
-          reviewers = [s.strip() for s in (os.getenv('REVIEWERS') or '').split(',') if s.strip()]
-          discord_ids = [mapping.get(r) for r in reviewers]
-          discord_ids = [d for d in discord_ids if d]
-
-          # 生メンション方式（allowed_mentions を使わない）
-          mentions = ' '.join([f"<@{d}>" for d in discord_ids])
-          fallback = ', '.join(reviewers)
-
-          lines = [
-            mentions,
-            f"PR: {os.getenv('PR_URL','')}",
-            f"Title: {os.getenv('PR_TITLE','')}",
-            f"Author: {os.getenv('PR_AUTHOR','')}",
-            f"Reviewers(GitHub): {fallback}",
-          ]
-          content = "\n".join([l for l in lines if l])
-
-          payload = {
-            "content": content
-          }
-
-          data = json.dumps(payload).encode('utf-8')
-          req = urllib.request.Request(
-            url,
-            data=data,
-            headers={"Content-Type": "application/json"},
-            method='POST',
-          )
-          with urllib.request.urlopen(req) as resp:
-            print('Discord status:', resp.status)
-          PY
+- name: Notify Discord (mention assigned reviewers)
+  if: ${{ steps.pr.outputs.draft != 'true' && steps.pr.outputs.reviewers_count != '0' }}
+  env:
+    DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+    PR_URL: ${{ steps.pr.outputs.url }}
+    PR_TITLE: ${{ steps.pr.outputs.title }}
+    PR_AUTHOR: ${{ steps.pr.outputs.author }}
+    REVIEWERS: ${{ steps.pr.outputs.reviewers }}
+  run: |
+    python3 - <<'PY'
+    import json, os, sys, urllib.request, pathlib
+    
+    url = (os.getenv('DISCORD_WEBHOOK_URL') or '').strip()
+    if not url:
+      print('DISCORD_WEBHOOK_URL is empty; skip.')
+      sys.exit(0)
+    
+    # GitHub login -> Discord user id mapping
+    mpath = pathlib.Path('.github/discord-reviewers.json')
+    mapping = {}
+    if mpath.exists():
+      mapping = json.loads(mpath.read_text('utf-8'))
+    
+    reviewers = [s.strip() for s in (os.getenv('REVIEWERS') or '').split(',') if s.strip()]
+    discord_ids = [mapping.get(r) for r in reviewers if mapping.get(r)]
+    
+    # メンション構築
+    mentions = ' '.join([f"<@{d}>" for d in discord_ids]) if discord_ids else ''
+    fallback = ', '.join(reviewers)
+    
+    lines = [
+      mentions,
+      f"PR: {os.getenv('PR_URL','')}",
+      f"Title: {os.getenv('PR_TITLE','')}",
+      f"Author: {os.getenv('PR_AUTHOR','')}",
+      f"Reviewers(GitHub): {fallback}",
+    ]
+    content = "\n".join([l for l in lines if l])
+    
+    payload = {
+      "content": content,
+      "allowed_mentions": {
+        "users": discord_ids  # CRITICAL: メンション許可リスト
+      }
+    }
+    
+    data = json.dumps(payload).encode('utf-8')
+    req = urllib.request.Request(
+      url,
+      data=data,
+      headers={"Content-Type": "application/json"},
+      method='POST',
+    )
+    
+    try:
+      with urllib.request.urlopen(req, timeout=10) as resp:
+        print('Discord notify: OK (status', resp.status, ')')
+    except urllib.error.HTTPError as e:
+      print('Discord API error:', e.code)
+      print('Response:', e.read().decode('utf-8'))
+      sys.exit(1)
+    PY
