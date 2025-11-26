@@ -1,3 +1,5 @@
+
+
 name: Reviewer lottery + Discord notify
 
 on:
@@ -57,48 +59,50 @@ jobs:
           PR_AUTHOR: ${{ steps.pr.outputs.author }}
           REVIEWERS: ${{ steps.pr.outputs.reviewers }}
         run: |
-          url="${DISCORD_WEBHOOK_URL}"
-          if [ -z "$url" ]; then
-            echo "DISCORD_REVIEW_WEBHOOK_URL is empty; skip."
-            exit 0
-          fi
+          python3 - <<'PY'
+          import json, os, sys, urllib.request, pathlib
 
-          mapping_file=".github/discord-reviewers.json"
-          reviewers_raw="${REVIEWERS}"
+          url = (os.getenv('DISCORD_WEBHOOK_URL') or '').strip()
+          if not url:
+            print('DISCORD_REVIEW_WEBHOOK_URL is empty; skip.')
+            sys.exit(0)
 
-          if [ -f "$mapping_file" ]; then
-            discord_ids=$(echo "$reviewers_raw" | tr ',' '\n' | while read -r r; do
-              id=$(jq -r --arg key "$r" '.[$key] // empty' "$mapping_file")
-              if [ -n "$id" ]; then
-                echo "$id"
-              fi
-            done)
-          else
-            discord_ids=""
-          fi
+          # GitHub login -> Discord user id の対応表
+          mpath = pathlib.Path('.github/discord-reviewers.json')
+          mapping = {}
+          if mpath.exists():
+            mapping = json.loads(mpath.read_text('utf-8'))
 
-          mentions=""
-          for id in $discord_ids; do
-            mentions="$mentions <@$id>"
-          done
+          reviewers = [s.strip() for s in (os.getenv('REVIEWERS') or '').split(',') if s.strip()]
 
-          fallback="$reviewers_raw"
+          discord_ids = [mapping.get(r) for r in reviewers]
+          discord_ids = [d for d in discord_ids if d]
 
-          content="$mentions
-PR: $PR_URL
-Title: $PR_TITLE
-Author: $PR_AUTHOR
-Reviewers(GitHub): $fallback"
+          mentions = ' '.join([f"<@{d}>" for d in discord_ids])
+          fallback = ', '.join(reviewers)
 
-          payload="$(
-            jq -n \
-              --arg content "$content" \
-              --argjson users "$(printf '%s\n' $discord_ids | jq -R . | jq -s .)" \
-              --argjson empty_array '[]' \
-              '$ARGS.named | {content: .content, allowed_mentions: {users: .users, parse: .empty_array}}'
-          )"
+          lines = [
+            mentions,
+            f"PR: {os.getenv('PR_URL','')}",
+            f"Title: {os.getenv('PR_TITLE','')}",
+            f"Author: {os.getenv('PR_AUTHOR','')}",
+            f"Reviewers(GitHub): {fallback}",
+          ]
+          content = "\n".join([l for l in lines if l])
 
-          curl -X POST \
-            -H "Content-Type: application/json" \
-            -d "$payload" \
-            "$url"
+          payload = {
+            "content": content,
+            # 誤爆防止：この投稿で許可する user mention を限定
+            "allowed_mentions": {"users": discord_ids, "parse": []}
+          }
+
+          data = json.dumps(payload).encode('utf-8')
+          req = urllib.request.Request(
+            url,
+            data=data,
+            headers={"Content-Type": "application/json"},
+            method='POST',
+          )
+          with urllib.request.urlopen(req) as resp:
+            print('Discord status:', resp.status)
+          PY
