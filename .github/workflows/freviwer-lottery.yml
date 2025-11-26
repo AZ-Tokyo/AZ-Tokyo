@@ -53,7 +53,7 @@ jobs:
       - name: Notify Discord (mention assigned reviewers)
         if: ${{ steps.pr.outputs.draft != 'true' && steps.pr.outputs.reviewers_count != '0' }}
         env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_REVIEW_WEBHOOK_URL }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           PR_URL: ${{ steps.pr.outputs.url }}
           PR_TITLE: ${{ steps.pr.outputs.title }}
           PR_AUTHOR: ${{ steps.pr.outputs.author }}
