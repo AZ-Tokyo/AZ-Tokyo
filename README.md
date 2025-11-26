@@ -10,7 +10,7 @@
 このレポジトリをクローンしたディレクトリに移動して以下のコマンドを実行してください。
 
 ```
-git config commit.template ./.commit_template
+git config commit.template ./commit_template.txt
 ```
 
 これでコミット時にテンプレートとコミットメッセージのルールを確認しながらコミットできます。
