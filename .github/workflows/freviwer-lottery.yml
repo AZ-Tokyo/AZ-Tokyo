@@ -35,37 +35,10 @@ jobs:
             core.setOutput('author', data.user.login);
             core.setOutput('draft', String(data.draft));
       
-      - name: Detailed Secret Analysis
-        env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: |
-          python3 - <<'PY'
-          import os
-          url = os.getenv('DISCORD_WEBHOOK_URL', '')
-          
-          # 正しいURL
-          expected = 'https://discord.com/api/webhooks/1443104736713769121/CA3S2L9AKK7An3oizsmoWERygoEdW4Epa5kx3tL44KfC0WPOzthqM9M0SDVfwfhiQq0h'
-          print('=== DETAILED COMPARISON ===')
-          print(f'Actual length: {len(url)}')
-          print(f'Expected length: {len(expected)}')
-          print(f'Difference: {len(url) - len(expected)} chars')
-          print()
-          
-          # 最初の100文字を比較
-          print('First 100 chars:')
-          print(f'Expected: {expected[:100]}')
-          print(f'Actual:   {url[:100]}')
-          print()
-          
-          # 16進数ダンプ（最初の50文字）
-          print('Hex dump (first 50 chars):')
-          print('Expected:', ' '.join(f'{ord(c):02x}' for c in expected[:50]))
-          print('Actual:  ', ' '.join(f'{ord(c):02x}' for c in url[:50]))
-          PY
-      
       - name: Notify Discord (mention assigned reviewers)
         if: ${{ steps.pr.outputs.draft != 'true' && steps.pr.outputs.reviewers_count != '0' }}
         env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           PR_URL: ${{ steps.pr.outputs.url }}
           PR_TITLE: ${{ steps.pr.outputs.title }}
           PR_AUTHOR: ${{ steps.pr.outputs.author }}
@@ -74,8 +47,10 @@ jobs:
           python3 - <<'PY'
           import json, os, sys, urllib.request, pathlib
           
-          # 正規のURLをハードコード（一時的）
-          url = 'https://discord.com/api/webhooks/1443104736713769121/CA3S2L9AKK7An3oizsmoWERygoEdW4Epa5kx3tL44KfC0WPOzthqM9M0SDVfwfhiQq0h'
+          url = (os.getenv('DISCORD_WEBHOOK_URL') or '').strip()
+          if not url:
+            print('DISCORD_WEBHOOK_URL is empty; skip.')
+            sys.exit(0)
           
           mpath = pathlib.Path('.github/discord-reviewers.json')
           mapping = {}
@@ -108,7 +83,10 @@ jobs:
           req = urllib.request.Request(
             url,
             data=data,
-            headers={"Content-Type": "application/json"},
+            headers={
+              "Content-Type": "application/json",
+              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            },
             method='POST',
           )
           
