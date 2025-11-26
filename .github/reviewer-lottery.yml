@@ -1,5 +1,5 @@
 groups:
-  - name: devs
+  - name: develop
     reviewers: 2
     usernames:
       - yuzu-juice

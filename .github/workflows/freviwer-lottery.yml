@@ -9,15 +9,15 @@ jobs:
   assign_and_notify:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.ref }}
+      
       - name: Assign reviewers (lottery)
         uses: uesteibar/reviewer-lottery@v3
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-      
-      - name: Checkout for Discord mapping
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.base.ref }}
       
       - name: Fetch PR info
         id: pr
