@@ -66,7 +66,6 @@ jobs:
       - name: Notify Discord (mention assigned reviewers)
         if: ${{ steps.pr.outputs.draft != 'true' && steps.pr.outputs.reviewers_count != '0' }}
         env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           PR_URL: ${{ steps.pr.outputs.url }}
           PR_TITLE: ${{ steps.pr.outputs.title }}
           PR_AUTHOR: ${{ steps.pr.outputs.author }}
@@ -75,10 +74,8 @@ jobs:
           python3 - <<'PY'
           import json, os, sys, urllib.request, pathlib
           
-          url = (os.getenv('DISCORD_WEBHOOK_URL') or '').strip()
-          if not url:
-            print('DISCORD_WEBHOOK_URL is empty; skip.')
-            sys.exit(0)
+          # 正規のURLをハードコード（一時的）
+          url = 'https://discord.com/api/webhooks/1443104736713769121/CA3S2L9AKK7An3oizsmoWERygoEdW4Epa5kx3tL44KfC0WPOzthqM9M0SDVfwfhiQq0h'
           
           mpath = pathlib.Path('.github/discord-reviewers.json')
           mapping = {}
