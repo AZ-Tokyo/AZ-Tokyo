@@ -7,13 +7,13 @@ import (
 )
 
 func main() {
-	r := gin.Default()
+	router := gin.Default()
 
-	r.GET("/ping", func(c *gin.Context) {
+	router.GET("/", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
+			"message": "Hello AZ-Tokyo",
 		})
 	})
 
-	r.Run(":8080")
+	router.Run(":8080")
 }
