@@ -8,17 +8,9 @@ NPM_CMD := npm
 .PHONY: help
 help:
 	@echo "Available commands:"
-	@echo "  make setup         - Install dependencies for both backend and frontend"
+	@echo "  make install       - Install dependencies for both backend and frontend"
 	@echo "  make dev           - Run both backend and frontend in development mode"
 	@echo "  make test          - Run tests for both"
-	@echo ""
-	@echo "Backend specific:"
-	@echo "  make dev-backend   - Run backend server"
-	@echo "  make test-backend  - Run backend tests"
-	@echo ""
-	@echo "Frontend specific:"
-	@echo "  make dev-frontend  - Run frontend dev server"
-	@echo "  make test-frontend - Run frontend tests"
 
 # ---------------------------------------------------------
 # Install dependencies
