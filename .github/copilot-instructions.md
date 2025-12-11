@@ -7,7 +7,7 @@ In this project, we are developing a web application. Both the backend and the f
 
 ## About “Law API Version 2”
 
-The specification for “Law API Version 2” is available at: `https://laws.e-gov.go.jp/api/2/swagger-ui/`.  
+The specification for “Law API Version 2” is available at: [https://laws.e-gov.go.jp/api/2/swagger-ui/](https://laws.e-gov.go.jp/api/2/swagger-ui/).  
 “Law API Version 2” is an API that allows you to search and retrieve laws registered on the e-Gov law search website via API.
 
 ## Programming Languages and Frameworks
