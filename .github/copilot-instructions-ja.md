@@ -6,7 +6,7 @@
 
 
 ## 「法令API Version2」について
-「法令API Version2」の仕様は "https://laws.e-gov.go.jp/api/2/swagger-ui/" にあります。「法令API Version2」は、 e-Gov という法令検索サイトに登録されている法令を API 経由で検索して取得できるものです。
+「法令API Version2」の仕様は [https://laws.e-gov.go.jp/api/2/swagger-ui/](https://laws.e-gov.go.jp/api/2/swagger-ui/) にあります。「法令API Version2」は、 e-Gov という法令検索サイトに登録されている法令を API 経由で検索して取得できるものです。
 
 
 ## 開発言語とフレームワーク
@@ -41,7 +41,7 @@
 - ![Static Badge](https://img.shields.io/badge/nits-7d64ff?style=for-the-badge)
   - "nitpicks" の略称で、修正しなくても問題ない細かい修正をコメントする。
 - ![Static Badge](https://img.shields.io/badge/good-32e132?style=for-the-badge)
-  - 変更された箇所のうち良い実装に対してをコメントする。
+  - 変更された箇所のうち良い実装に対してコメントする。
 
 それぞれのラベルが持つ意味に合わせて正しく使い分けてください。
 
