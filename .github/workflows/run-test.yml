@@ -12,6 +12,7 @@ on:
 
   workflow_dispatch:
 
+jobs:
   frontend-test:
     name: Frontend test
     runs-on: ubuntu-latest
