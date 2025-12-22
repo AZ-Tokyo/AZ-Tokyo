@@ -11,6 +11,9 @@ help:
 	@echo "  make install       - Install dependencies for both backend and frontend"
 	@echo "  make dev           - Run both backend and frontend in development mode"
 	@echo "  make test          - Run tests for both"
+	@echo "  make up            - Start Docker containers in detached mode"
+	@echo "  make down          - Stop and remove Docker containers"
+	@echo "  make build         - Build Docker images"
 
 # ---------------------------------------------------------
 # Install dependencies
@@ -50,3 +53,15 @@ test-backend:
 test-frontend:
 	cd $(FRONTEND_DIR) && $(NPM_CMD) run test
 
+# ---------------------------------------------------------
+# Docker compose
+# ---------------------------------------------------------
+.PHONY: up down build
+up:
+	docker compose up -d
+
+down:
+	docker compose down
+
+build:
+	docker compose build --no-cache
