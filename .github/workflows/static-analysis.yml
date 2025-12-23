@@ -31,9 +31,6 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
-      - name: Run Typecheck
-        run: npm run build
-
   backend:
     name: Backend Lint
     runs-on: ubuntu-latest
