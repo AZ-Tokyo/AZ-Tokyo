@@ -37,28 +37,20 @@ jobs:
   backend:
     name: Backend Lint
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./backend
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Check for go.mod
-        id: check_go_mod
-        run: |
-          if [ -f "backend/go.mod" ]; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
-
       - name: Setup Go
-        if: steps.check_go_mod.outputs.exists == 'true'
         uses: actions/setup-go@v5
         with:
           go-version-file: 'backend/go.mod'
           cache-dependency-path: 'backend/go.sum'
 
       - name: Run golangci-lint
-        if: steps.check_go_mod.outputs.exists == 'true'
         uses: golangci/golangci-lint-action@v6
         with:
           version: latest
