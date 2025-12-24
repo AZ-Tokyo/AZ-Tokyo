@@ -9,7 +9,7 @@ on:
 
 jobs:
   frontend:
-    name: Frontend Lint & Typecheck
+    name: Frontend Lint
     runs-on: ubuntu-latest
     defaults:
       run:
