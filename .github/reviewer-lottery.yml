@@ -1,6 +1,6 @@
 groups:
   - name: develop
-    reviewers: 2
+    reviewers: 1
     usernames:
       - yuzu-juice
       - sudolifeagain
