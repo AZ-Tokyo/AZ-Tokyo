@@ -10,6 +10,7 @@ export const buttonBaseStyle = `
   aria-disabled:pointer-events-none aria-disabled:forced-colors:border-[GrayText] aria-disabled:forced-colors:text-[GrayText]
 `;
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const buttonVariantStyle: { [key in ButtonVariant]: string } = {
   'solid-fill': `
     border-4
@@ -53,6 +54,7 @@ export const buttonVariantStyle: { [key in ButtonVariant]: string } = {
   `,
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const buttonSizeStyle: { [key in ButtonSize]: string } = {
   lg: 'min-w-[calc(136/16*1rem)] min-h-14 rounded-8 px-4 py-3 text-oln-16B-100',
   md: 'min-w-24 min-h-12 rounded-8 px-4 py-2 text-oln-16B-100',
