@@ -7,3 +7,8 @@ output "service_urls" {
   description = "The URLs of the deployed Cloud Run services."
   value       = { for k, v in google_cloud_run_v2_service.services : k => v.uri }
 }
+
+output "cloud_sql_connection_name" {
+  description = "The connection name of the Cloud SQL instance to be used in connection strings."
+  value       = google_sql_database_instance.default.connection_name
+}
