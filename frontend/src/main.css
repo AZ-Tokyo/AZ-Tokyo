@@ -1,2 +1,8 @@
 @import "tailwindcss";
 @plugin "@digital-go-jp/tailwind-theme-plugin";
+
+@theme {
+  --color-primary: var(--color-light-blue-800);
+  --color-secondary: var(--color-light-blue-600);
+  --color-tertiary: var(--color-light-blue-1000);
+}
