@@ -69,6 +69,8 @@ resource "google_service_account" "cloud_run_sa" {
   account_id   = "cloud-run-sa"
   display_name = "Cloud Run Service Account"
   project      = var.project_id
+  
+  depends_on = [google_project_service.apis]
 }
 
 resource "google_project_iam_member" "cloud_sql_client" {
