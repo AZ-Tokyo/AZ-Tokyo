@@ -24,7 +24,8 @@ resource "google_project_service" "apis" {
     "run.googleapis.com",
     "artifactregistry.googleapis.com",
     "sqladmin.googleapis.com",
-    "secretmanager.googleapis.com"
+    "secretmanager.googleapis.com",
+    "iam.googleapis.com"
   ])
   project            = var.project_id
   service            = each.key
