@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
-import { LanguageSelectorArrowIcon, LanguageSelectorGlobeIcon } from './../';
+import { LanguageSelectorArrowIcon, LanguageSelectorGlobeIcon } from '..';
 import { LanguageSelectorButton } from './Button';
 
 const meta = {

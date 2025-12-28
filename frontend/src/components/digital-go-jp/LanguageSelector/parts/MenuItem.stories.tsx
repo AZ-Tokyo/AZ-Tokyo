@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { LanguageSelectorMenu } from './../';
+import { LanguageSelectorMenu } from '..';
 import { LanguageSelectorMenuItem } from './MenuItem';
 
 const meta = {
