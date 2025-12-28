@@ -5,6 +5,10 @@ terraform {
       version = "~> 5.0"
     }
   }
+  backend "gcs" {
+    bucket = "terraform-state-az-tokyo"
+    prefix = "terraform/state"
+  }
 }
 
 provider "google" {
@@ -12,42 +16,65 @@ provider "google" {
   region  = var.region
 }
 
-resource "google_project_service" "run_api" {
+# ---------------------------------------------------------------------------------------------------------------------
+# APIS
+# ---------------------------------------------------------------------------------------------------------------------
+resource "google_project_service" "apis" {
+  for_each = toset([
+    "run.googleapis.com",
+    "artifactregistry.googleapis.com"
+  ])
   project            = var.project_id
-  service            = "run.googleapis.com"
+  service            = each.key
   disable_on_destroy = false
 }
 
-resource "google_project_service" "artifact_registry_api" {
-  project            = var.project_id
-  service            = "artifactregistry.googleapis.com"
-  disable_on_destroy = false
-}
+# ---------------------------------------------------------------------------------------------------------------------
+# ARTIFACT REGISTRY
+# ---------------------------------------------------------------------------------------------------------------------
+resource "google_artifact_registry_repository" "repos" {
+  for_each = var.service_names
 
-resource "google_artifact_registry_repository" "artifact_registry_repositories" {
-  for_each      = toset(var.artifact_registry_repositories)
   location      = var.region
   repository_id = each.key
   description   = "${each.key} docker repository"
   format        = "DOCKER"
 
-  depends_on = [
-    google_project_service.artifact_registry_api
-  ]
+  depends_on = [google_project_service.apis]
 }
 
-module "cloud_run_service" {
-  for_each = var.cloud_run_services
+# ---------------------------------------------------------------------------------------------------------------------
+# CLOUD RUN
+# ---------------------------------------------------------------------------------------------------------------------
+resource "google_cloud_run_v2_service" "services" {
+  for_each = var.service_names
 
-  source = "./modules/cloud_run"
+  name     = each.key
+  location = var.region
+  ingress  = "INGRESS_TRAFFIC_ALL"
 
-  name       = each.value.name
-  location   = var.region
-  image      = each.value.image
-  project_id = var.project_id
+  template {
+    containers {
+      image = "us-docker.pkg.dev/cloudrun/container/hello"
+    }
+  }
 
-  depends_on = [
-    google_project_service.run_api,
-    google_project_service.artifact_registry_api
-  ]
+  lifecycle {
+    ignore_changes = [
+      template[0].containers[0].image,
+      client,
+      client_version
+    ]
+  }
+
+  depends_on = [google_project_service.apis]
+}
+
+resource "google_cloud_run_v2_service_iam_member" "public_access" {
+  for_each = var.service_names
+
+  location = var.region
+  name     = google_cloud_run_v2_service.services[each.key].name
+  role     = "roles/run.invoker"
+  member   = "allUsers"
 }
