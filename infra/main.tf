@@ -39,6 +39,7 @@ resource "google_artifact_registry_repository" "repos" {
   repository_id = each.key
   description   = "${each.key} docker repository"
   format        = "DOCKER"
+  project       = var.project_id
 
   depends_on = [google_project_service.apis]
 }
@@ -52,9 +53,12 @@ resource "google_cloud_run_v2_service" "services" {
   name     = each.key
   location = var.region
   ingress  = "INGRESS_TRAFFIC_ALL"
+  project  = var.project_id
 
   template {
     containers {
+      # Use a placeholder image initially.
+      # In a real CI/CD pipeline, this would be ignored or dynamically set.
       image = "us-docker.pkg.dev/cloudrun/container/hello"
     }
   }
@@ -70,10 +74,12 @@ resource "google_cloud_run_v2_service" "services" {
   depends_on = [google_project_service.apis]
 }
 
+# Allow unauthenticated access (public)
 resource "google_cloud_run_v2_service_iam_member" "public_access" {
   for_each = var.service_names
 
   location = var.region
+  project  = var.project_id
   name     = google_cloud_run_v2_service.services[each.key].name
   role     = "roles/run.invoker"
   member   = "allUsers"
