@@ -23,7 +23,9 @@ func main() {
 		panic("failed to connect database")
 	}
 
-	db.AutoMigrate(&User{})
+	if err := db.AutoMigrate(&User{}); err != nil {
+		panic("Failed to migrate database: " + err.Error())
+	}
 	db.FirstOrCreate(&User{Name: "test_user"})
 
 	var target User
