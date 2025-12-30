@@ -18,7 +18,10 @@ type UserRepositoryTestSuite struct {
 func (s *UserRepositoryTestSuite) SetupTest() {
     db, err := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
     s.NoError(err)
-    db.AutoMigrate(&model.User{})
+	if err := db.AutoMigrate(&model.User{}); err != nil {
+		panic("Failed to migrate database: " + err.Error())
+	}
+
     s.db = db
     s.repo = NewUserRepository(db)
 }
