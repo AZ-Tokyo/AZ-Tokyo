@@ -130,10 +130,8 @@ resource "google_sql_user" "default" {
 # ---------------------------------------------------------------------------------------------------------------------
 # CLOUD RUN
 # ---------------------------------------------------------------------------------------------------------------------
-resource "google_cloud_run_v2_service" "services" {
-  for_each = var.service_names
-
-  name     = each.key
+resource "google_cloud_run_v2_service" "backend" {
+  name     = "backend"
   location = var.region
   ingress  = "INGRESS_TRAFFIC_ALL"
   project  = var.project_id
@@ -149,32 +147,32 @@ resource "google_cloud_run_v2_service" "services" {
         mount_path = "/cloudsql"
       }
 
-      dynamic "env" {
-        for_each = each.key == "backend" ? {
-          APP_ENV = "production"
-          DB_HOST = "/cloudsql/${google_sql_database_instance.default.connection_name}"
-          DB_USER = google_sql_user.default.name
-          DB_NAME = google_sql_database.default.name
-          INSTANCE_CONNECTION_NAME = google_sql_database_instance.default.connection_name
-        } : {
-          NODE_ENV = "production"
-          API_URL  = "https://${google_cloud_run_v2_service.services["backend"].uri}"
-        }
-        content {
-          name  = env.key
-          value = env.value
-        }
+      env {
+        name  = "APP_ENV"
+        value = "production"
       }
-
-      dynamic "env" {
-        for_each = each.key == "backend" ? [1] : []
-        content {
-            name = "DB_PASSWORD"
-            value_source {
-                secret_key_ref {
-                    secret  = google_secret_manager_secret.db_password.secret_id
-                    version = "latest"
-                }
+      env {
+        name  = "DB_HOST"
+        value = "/cloudsql/${google_sql_database_instance.default.connection_name}"
+      }
+      env {
+        name  = "DB_USER"
+        value = google_sql_user.default.name
+      }
+      env {
+        name  = "DB_NAME"
+        value = google_sql_database.default.name
+      }
+      env {
+        name  = "INSTANCE_CONNECTION_NAME"
+        value = google_sql_database_instance.default.connection_name
+      }
+      env {
+        name = "DB_PASSWORD"
+        value_source {
+            secret_key_ref {
+                secret  = google_secret_manager_secret.db_password.secret_id
+                version = "latest"
             }
         }
       }
@@ -199,13 +197,53 @@ resource "google_cloud_run_v2_service" "services" {
   depends_on = [google_project_service.apis]
 }
 
-# Allow unauthenticated access (public)
-resource "google_cloud_run_v2_service_iam_member" "public_access" {
-  for_each = var.service_names
+resource "google_cloud_run_v2_service" "frontend" {
+  name     = "frontend"
+  location = var.region
+  ingress  = "INGRESS_TRAFFIC_ALL"
+  project  = var.project_id
 
+  template {
+    service_account = google_service_account.cloud_run_sa.email
+
+    containers {
+      image = "us-docker.pkg.dev/cloudrun/container/hello"
+
+      env {
+        name  = "NODE_ENV"
+        value = "production"
+      }
+      env {
+        name  = "API_URL"
+        value = google_cloud_run_v2_service.backend.uri
+      }
+    }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      template[0].containers[0].image,
+      client,
+      client_version
+    ]
+  }
+
+  depends_on = [google_project_service.apis, google_cloud_run_v2_service.backend]
+}
+
+# Allow unauthenticated access (public)
+resource "google_cloud_run_v2_service_iam_member" "backend_public_access" {
   location = var.region
   project  = var.project_id
-  name     = google_cloud_run_v2_service.services[each.key].name
+  name     = google_cloud_run_v2_service.backend.name
+  role     = "roles/run.invoker"
+  member   = "allUsers"
+}
+
+resource "google_cloud_run_v2_service_iam_member" "frontend_public_access" {
+  location = var.region
+  project  = var.project_id
+  name     = google_cloud_run_v2_service.frontend.name
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
