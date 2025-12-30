@@ -1,35 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Accordion, AccordionContent, AccordionSummary } from "./components/digital-go-jp/Accordion"
 
-function App() {
-  const [count, setCount] = useState(0)
-
+export default function App() {
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <h1 className="sticky font-sans top-0 px-8 py-4 z-10 shadow-1 text-std-45B-140">デジタル資産相続ツール</h1>
+      
+      <div className="px-16 py-8 flex flex-col">
+        <Accordion>
+          <AccordionSummary>
+            <h3>デジタル資産相続ツール</h3>
+          </AccordionSummary>
+          <AccordionContent>
+            <p>
+              「法令」×「デジタル」で開発するツールです。<br></br>
+              スマートフォンやデバイスに記録されているデータから、故人が保有していたデジタル資産をデータ化し、相続の可否を自動で反転します。
+            </p>
+          </AccordionContent>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary>
+            <h3>使い方</h3>
+          </AccordionSummary>
+          <AccordionContent>
+            <p>
+              「データをスキャンする」のボタンから追加できます。
+            </p>
+          </AccordionContent>
+        </Accordion>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
   )
 }
-
-export default App
