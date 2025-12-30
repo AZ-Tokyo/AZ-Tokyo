@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
+	"net/http"
+	"os"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"net/http"
 )
 
 func Add(a, b int) int {
@@ -17,10 +19,26 @@ type User struct {
 }
 
 func main() {
-	dsn := "host=localhost user=user password=password dbname=aztokyo port=5432 sslmode=disable TimeZone=Asia/Tokyo"
+	appEnv := os.Getenv("APP_ENV")
+
+	var dsn string
+
+	if appEnv == "production" {
+		dbUser := os.Getenv("DB_USER")
+		dbPass := os.Getenv("DB_PASSWORD")
+		dbName := os.Getenv("DB_NAME")
+		instanceConnectionName := os.Getenv("INSTANCE_CONNECTION_NAME")
+
+
+		dsn = fmt.Sprintf("host=/cloudsql/%s user=%s password=%s dbname=%s port=5432 sslmode=disable TimeZone=Asia/Tokyo",
+			instanceConnectionName, dbUser, dbPass, dbName)
+	} else {
+		dsn = "host=localhost user=user password=password dbname=aztokyo port=5432 sslmode=disable TimeZone=Asia/Tokyo"
+	}
+
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect database")
+		panic("failed to connect database: " + err.Error())
 	}
 
 	if err := db.AutoMigrate(&User{}); err != nil {
@@ -48,7 +66,13 @@ func main() {
 
 		c.JSON(http.StatusOK, target)
 	})
-	if err := router.Run(":8080"); err != nil {
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+
+	if err := router.Run(":" + port); err != nil {
 		panic(err)
 	}
 }
