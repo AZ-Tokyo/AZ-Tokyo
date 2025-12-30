@@ -1,9 +1,8 @@
 groups:
   - name: develop
-    reviewers: 2
+    reviewers: 1
     usernames:
       - yuzu-juice
       - sudolifeagain
       - NakajiZaiLFC
       - E233-3639
-      - pito-labs
