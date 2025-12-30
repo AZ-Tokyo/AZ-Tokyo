@@ -2,21 +2,17 @@ package main
 
 import (
 	"fmt"
-	"net/http"
+	"log"
 	"os"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/handler"
+	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/model"
+	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/repository"
+	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/router"
 )
-
-func Add(a, b int) int {
-	return a + b
-}
-
-type User struct {
-	gorm.Model
-	Name string `gorm:"size:255"`
-}
 
 func main() {
 	appEnv := os.Getenv("APP_ENV")
@@ -38,41 +34,18 @@ func main() {
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		panic("failed to connect database: " + err.Error())
+		log.Fatalf("failed to setup database: %v", err)
 	}
 
-	if err := db.AutoMigrate(&User{}); err != nil {
-		panic("Failed to migrate database: " + err.Error())
-	}
-	db.FirstOrCreate(&User{Name: "test_user"})
-
-	var target User
-	db.First(&target, "name = ?", "test_user")
-
-	router := gin.Default()
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "Hello AZ-Tokyo",
-		})
-	})
-	router.GET("/user", func(c *gin.Context) {
-		var target User
-		result := db.First(&target, "name = ?", "test_user")
-
-		if result.Error != nil {
-			c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
-			return
-		}
-
-		c.JSON(http.StatusOK, target)
-	})
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
+	if err := db.AutoMigrate(&model.User{}); err != nil {
+		log.Fatalf("failed to migrate database: %v", err)
 	}
 
-	if err := router.Run(":" + port); err != nil {
-		panic(err)
+	userRepo := repository.NewUserRepository(db)
+	h := handler.NewHandler(userRepo)
+
+	r := router.Setup(h)
+	if err := r.Run(":8080"); err != nil {
+		log.Fatalf("failed to start server: %v", err)
 	}
 }
