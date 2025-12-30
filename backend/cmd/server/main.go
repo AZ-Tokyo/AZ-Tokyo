@@ -1,19 +1,35 @@
 package main
 
 import (
+	"fmt"
 	"log"
-
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
+	"os"
 
 	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/handler"
 	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/model"
 	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/repository"
 	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/router"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 func main() {
-	dsn := "host=localhost user=user password=password dbname=aztokyo port=5432 sslmode=disable TimeZone=Asia/Tokyo"
+	appEnv := os.Getenv("APP_ENV")
+
+	var dsn string
+
+	if appEnv == "production" {
+		dbUser := os.Getenv("DB_USER")
+		dbPass := os.Getenv("DB_PASSWORD")
+		dbName := os.Getenv("DB_NAME")
+		instanceConnectionName := os.Getenv("INSTANCE_CONNECTION_NAME")
+
+		dsn = fmt.Sprintf("host=/cloudsql/%s user=%s password=%s dbname=%s port=5432 sslmode=disable TimeZone=Asia/Tokyo",
+			instanceConnectionName, dbUser, dbPass, dbName)
+	} else {
+		dsn = "host=localhost user=user password=password dbname=aztokyo port=5432 sslmode=disable TimeZone=Asia/Tokyo"
+	}
+
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("failed to setup database: %v", err)
