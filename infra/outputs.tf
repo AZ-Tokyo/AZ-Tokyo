@@ -5,7 +5,10 @@ output "repository_urls" {
 
 output "service_urls" {
   description = "The URLs of the deployed Cloud Run services."
-  value       = { for k, v in google_cloud_run_v2_service.services : k => v.uri }
+  value       = {
+    backend  = google_cloud_run_v2_service.backend.uri
+    frontend = google_cloud_run_v2_service.frontend.uri
+  }
 }
 
 output "cloud_sql_connection_name" {
