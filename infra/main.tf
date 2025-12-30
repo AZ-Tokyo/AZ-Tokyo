@@ -69,7 +69,7 @@ resource "google_service_account" "cloud_run_sa" {
   account_id   = "cloud-run-sa"
   display_name = "Cloud Run Service Account"
   project      = var.project_id
-  
+
   depends_on = [google_project_service.apis]
 }
 
@@ -153,9 +153,11 @@ resource "google_cloud_run_v2_service" "services" {
 
       dynamic "env" {
         for_each = each.key == "backend" ? {
+          APP_ENV = "production"
           DB_HOST = "/cloudsql/${google_sql_database_instance.default.connection_name}"
           DB_USER = google_sql_user.default.name
           DB_NAME = google_sql_database.default.name
+          INSTANCE_CONNECTION_NAME = google_sql_database_instance.default.connection_name
         } : {}
         content {
           name  = env.key
