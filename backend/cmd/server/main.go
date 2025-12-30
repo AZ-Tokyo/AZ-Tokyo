@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"github.com/gin-gonic/gin"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
 
 	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/handler"
 	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/model"
 	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/repository"
 	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/router"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 func main() {
@@ -24,7 +23,6 @@ func main() {
 		dbPass := os.Getenv("DB_PASSWORD")
 		dbName := os.Getenv("DB_NAME")
 		instanceConnectionName := os.Getenv("INSTANCE_CONNECTION_NAME")
-
 
 		dsn = fmt.Sprintf("host=/cloudsql/%s user=%s password=%s dbname=%s port=5432 sslmode=disable TimeZone=Asia/Tokyo",
 			instanceConnectionName, dbUser, dbPass, dbName)
