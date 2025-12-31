@@ -16,7 +16,7 @@ func NewHandler(userService service.UserService) *Handler {
 	return &Handler{UserService: userService}
 }
 
-func (h *Handler) GetUsers(c *gin.Context) {
+func (h *Handler) GetAllUsers(c *gin.Context) {
 	users, err := h.UserService.FindAll()
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
