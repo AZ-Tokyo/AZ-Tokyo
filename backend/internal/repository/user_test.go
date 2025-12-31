@@ -44,6 +44,29 @@ func (s *UserRepositoryTestSuite) TestFindAll_Empty() {
     s.Len(users, 0)
 }
 
+func (s *UserRepositoryTestSuite) TestCreate_Success() {
+	user := &model.User{Name: "Yamada"}
+
+	err := s.repo.Create(user)
+
+	s.NoError(err)
+	s.NotZero(user.ID)
+
+	var dbUser model.User
+	result := s.db.First(&dbUser, user.ID)
+	s.NoError(result.Error)
+	s.Equal("Yamada", dbUser.Name)
+}
+
+func (s *UserRepositoryTestSuite) TestCreate_Error() {
+	s.NoError(s.db.Migrator().DropTable(&model.User{}))
+
+	user := &model.User{Name: "Error User"}
+	err := s.repo.Create(user)
+
+	s.Error(err)
+}
+
 func TestUserRepository(t *testing.T) {
     suite.Run(t, new(UserRepositoryTestSuite))
 }
