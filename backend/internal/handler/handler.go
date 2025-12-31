@@ -4,20 +4,20 @@ import (
 	"net/http"
 
 	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/model"
-	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/repository"
+	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/service"
 	"github.com/gin-gonic/gin"
 )
 
 type Handler struct {
-	UserRepo repository.UserRepository
+	UserService service.UserService
 }
 
-func NewHandler(userRepo repository.UserRepository) *Handler {
-	return &Handler{UserRepo: userRepo}
+func NewHandler(userService service.UserService) *Handler {
+	return &Handler{UserService: userService}
 }
 
 func (h *Handler) GetUsers(c *gin.Context) {
-	users, err := h.UserRepo.FindAll()
+	users, err := h.UserService.FindAll()
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
@@ -33,7 +33,7 @@ func (h *Handler) CreateUser(c *gin.Context) {
 		return
 	}
 
-	if err := h.UserRepo.Create(&user); err != nil {
+	if err := h.UserService.Create(&user); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
 		return
 	}
