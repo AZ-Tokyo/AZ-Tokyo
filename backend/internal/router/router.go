@@ -8,5 +8,6 @@ import (
 func Setup(h *handler.Handler) *gin.Engine {
 	router := gin.Default()
 	router.GET("/users", h.GetUsers)
+	router.POST("/users", h.CreateUser)
 	return router
 }
