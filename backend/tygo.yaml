@@ -1,0 +1,8 @@
+type_mappings:
+  time.Time: "string"
+  gorm.Model: "{ ID: number; CreatedAt: string; UpdatedAt: string; DeletedAt?: string | null }"
+
+packages:
+  - path: "github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/model"
+    output_path: "../frontend/src/types/model.ts"
+    fallback_type: "any"
