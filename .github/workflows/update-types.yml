@@ -1,0 +1,50 @@
+name: Update TypeScript Types
+
+on:
+  push:
+    branches:
+      - 'feature/**'
+    paths:
+      - 'backend/internal/model/**'
+      - 'backend/tygo.yaml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-types:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25'
+          cache: true
+          cache-dependency-path: backend/go.sum
+
+      - name: Generate Types
+        run: make gen-types
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          if [[ -n $(git status --porcelain frontend/src/types/) ]]; then
+            echo "changes_detected=true" >> $GITHUB_OUTPUT
+          else
+            echo "changes_detected=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit and Push changes
+        if: steps.check_changes.outputs.changes_detected == 'true'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add frontend/src/types/model.ts
+          git commit -m "docs: update typescript definitions from backend models"
+          git push origin HEAD:${{ github.ref_name }}
