@@ -33,6 +33,8 @@ install-frontend:
 # ---------------------------------------------------------
 .PHONY: dev dev-backend dev-frontend
 dev:
+	@echo "Starting database..."
+	docker compose up -d db
 	@echo "Starting both backend and frontend..."
 	@$(MAKE) -j2 dev-backend dev-frontend
 
