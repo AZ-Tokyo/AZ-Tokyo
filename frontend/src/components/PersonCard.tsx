@@ -13,7 +13,7 @@ export function PersonCard({ person, onClick }: PersonCardProps) {
     >
       <div>
         <h3 className="text-xl font-bold text-gray-900 group-hover:text-blue-900 transition-colors">
-          {person.name}{" "}
+          {person.Name}{" "}
           <span className="text-sm font-normal text-gray-400 ml-1">様</span>
         </h3>
       </div>
