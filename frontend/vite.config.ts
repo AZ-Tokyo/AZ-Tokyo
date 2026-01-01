@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react(), tailwindcss()],
     server: {
       proxy: {
-        "/users": env.API_URL || "http://localhost:8080",
+        "/api/users": env.API_URL || "http://localhost:8080",
       },
     },
   };
