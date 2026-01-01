@@ -73,5 +73,5 @@ build:
 # Code Generation
 # ---------------------------------------------------------
 .PHONY: gen-types
-gen-types:
+gen-types: install-backend
 	cd $(BACKEND_DIR) && $(GO_CMD) run github.com/gzuidhof/tygo@latest generate
