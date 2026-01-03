@@ -7,4 +7,4 @@ export {
   PaginationLast,
   PaginationNext,
   PaginationPrev,
-} from './Pagination';
+} from './Pagination'

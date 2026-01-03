@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "@digital-go-jp/tailwind-theme-plugin";
 
 @theme {

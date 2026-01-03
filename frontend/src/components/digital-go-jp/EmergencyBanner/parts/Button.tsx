@@ -1,9 +1,9 @@
-import type { ComponentProps } from 'react';
+import type { ComponentProps } from 'react'
 
-type Props = ComponentProps<'a'>;
+type Props = ComponentProps<'a'>
 
 export const EmergencyBannerButton = (props: Props) => {
-  const { className, children, ...rest } = props;
+  const { className, children, ...rest } = props
 
   return (
     <a
@@ -19,34 +19,36 @@ export const EmergencyBannerButton = (props: Props) => {
       {...rest}
     >
       {children}
-      {props.target === '_blank' && <NewWindowIcon className='ml-1 align-top' />}
+      {props.target === '_blank' && (
+        <NewWindowIcon className="ml-1 align-top" />
+      )}
     </a>
-  );
-};
+  )
+}
 
-type NewWindowIconProps = ComponentProps<'svg'>;
+type NewWindowIconProps = ComponentProps<'svg'>
 
 const NewWindowIcon = (props: NewWindowIconProps) => {
-  const { className, ...rest } = props;
+  const { className, ...rest } = props
 
   return (
     <svg
       aria-label={`${rest['aria-label'] ?? '新規タブで開きます'}`}
       className={`inline ${className ?? ''}`}
-      fill='none'
-      height='16'
-      role='img'
-      viewBox='0 0 16 16'
-      width='16'
+      fill="none"
+      height="16"
+      role="img"
+      viewBox="0 0 16 16"
+      width="16"
     >
       <g>
         <path
-          clipRule='evenodd'
-          d='M3 13.5H13V9.16667H14V14.5H2V2.5H7.33333V3.5H3V13.5ZM9.33333 3.5V2.5H14V7.16667H13V4.23333L7 10.1667L6.33333 9.5L12.2667 3.5H9.33333Z'
-          fillRule='evenodd'
-          fill='currentColor'
+          clipRule="evenodd"
+          d="M3 13.5H13V9.16667H14V14.5H2V2.5H7.33333V3.5H3V13.5ZM9.33333 3.5V2.5H14V7.16667H13V4.23333L7 10.1667L6.33333 9.5L12.2667 3.5H9.33333Z"
+          fillRule="evenodd"
+          fill="currentColor"
         />
       </g>
     </svg>
-  );
-};
+  )
+}

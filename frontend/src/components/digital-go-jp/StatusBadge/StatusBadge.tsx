@@ -1,7 +1,7 @@
-import type { ComponentProps } from 'react';
+import type { ComponentProps } from 'react'
 
 export const StatusBadge = (props: ComponentProps<'span'>) => {
-  const { className, children, ...rest } = props;
+  const { className, children, ...rest } = props
 
   return (
     <span
@@ -10,5 +10,5 @@ export const StatusBadge = (props: ComponentProps<'span'>) => {
     >
       {children}
     </span>
-  );
-};
+  )
+}

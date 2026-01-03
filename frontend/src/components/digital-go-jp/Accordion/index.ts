@@ -3,4 +3,4 @@ export {
   AccordionBackLink,
   AccordionContent,
   AccordionSummary,
-} from './Accordion';
+} from './Accordion'

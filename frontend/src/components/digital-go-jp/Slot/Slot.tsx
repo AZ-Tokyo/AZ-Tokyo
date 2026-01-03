@@ -1,11 +1,17 @@
-import { Children, cloneElement, type HTMLAttributes, isValidElement, type ReactNode } from 'react';
+import {
+  Children,
+  cloneElement,
+  type HTMLAttributes,
+  isValidElement,
+  type ReactNode,
+} from 'react'
 
 type SlotProps = HTMLAttributes<HTMLElement> & {
-  children?: ReactNode;
-};
+  children?: ReactNode
+}
 
 export const Slot = (props: SlotProps) => {
-  const { children, ...rest } = props;
+  const { children, ...rest } = props
 
   // https://react.dev/reference/react/isValidElement
   // https://react.dev/reference/react/cloneElement
@@ -14,12 +20,12 @@ export const Slot = (props: SlotProps) => {
       ...rest,
       ...children.props,
       className: `${rest.className ?? ''} ${children.props.className ?? ''}`,
-    });
+    })
   }
 
   if (Children.count(children) > 1) {
-    Children.only(null);
+    Children.only(null)
   }
 
-  return null;
-};
+  return null
+}

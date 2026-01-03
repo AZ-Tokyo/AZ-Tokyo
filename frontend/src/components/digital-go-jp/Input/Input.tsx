@@ -1,14 +1,14 @@
-import { type ComponentProps, forwardRef } from 'react';
+import { type ComponentProps, forwardRef } from 'react'
 
-export type InputBlockSize = 'lg' | 'md' | 'sm';
+export type InputBlockSize = 'lg' | 'md' | 'sm'
 
 export type InputProps = ComponentProps<'input'> & {
-  isError?: boolean;
-  blockSize?: InputBlockSize;
-};
+  isError?: boolean
+  blockSize?: InputBlockSize
+}
 
 export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
-  const { className, readOnly, isError, blockSize = 'lg', ...rest } = props;
+  const { className, readOnly, isError, blockSize = 'lg', ...rest } = props
 
   return (
     <input
@@ -28,5 +28,5 @@ export const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       ref={ref}
       {...rest}
     />
-  );
-});
+  )
+})

@@ -1,13 +1,13 @@
-import type { ComponentProps } from 'react';
+import type { ComponentProps } from 'react'
 
-export type LabelSize = 'lg' | 'md' | 'sm';
+export type LabelSize = 'lg' | 'md' | 'sm'
 
 export type LabelProps = ComponentProps<'label'> & {
-  size?: LabelSize;
-};
+  size?: LabelSize
+}
 
 export const Label = (props: LabelProps) => {
-  const { children, className, size = 'md', ...rest } = props;
+  const { children, className, size = 'md', ...rest } = props
 
   return (
     <label
@@ -21,5 +21,5 @@ export const Label = (props: LabelProps) => {
     >
       {children}
     </label>
-  );
-};
+  )
+}

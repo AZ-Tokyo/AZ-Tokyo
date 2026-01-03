@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import {
+  Accordion,
+  AccordionContent,
+  AccordionSummary,
   Button,
-  Divider
+  Divider,
 } from "./components/digital-go-jp";
 import { PersonCard } from "./components/PersonCard";
 import type { User } from "./types/model";
@@ -25,18 +28,37 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans">
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        <header className="mb-8">
-          <div className="flex justify-between items-end mb-6">
-            <div>
-              <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
-                デジタル資産相続ツール
-              </h1>
-            </div>
-          </div>
-          <Divider />
-        </header>
+    <>
+      <h1 className="sticky font-sans top-0 px-8 py-4 z-10 shadow-1 text-std-45B-140 bg-white">
+        デジタル資産相続ツール
+      </h1>
+
+      <div className="px-16 py-8 flex flex-col gap-8">
+        <div className="flex flex-col">
+          <Accordion>
+            <AccordionSummary>
+              <h3>デジタル資産相続ツールについて</h3>
+            </AccordionSummary>
+            <AccordionContent>
+              <p>
+                「法令」×「デジタル」で開発するツールです。<br />
+                スマートフォンやデバイスに記録されているデータから、故人が保有していたデジタル資産をデータ化し、相続の可否を自動で判定します。
+              </p>
+            </AccordionContent>
+          </Accordion>
+          <Accordion>
+            <AccordionSummary>
+              <h3>使い方</h3>
+            </AccordionSummary>
+            <AccordionContent>
+              <p>
+                「データをスキャンする」のボタンから追加できます。
+              </p>
+            </AccordionContent>
+          </Accordion>
+        </div>
+
+        <Divider />
 
         <main>
           <div className="flex items-center justify-between mb-8">
@@ -58,11 +80,7 @@ export default function App() {
             ))}
           </div>
         </main>
-
-        <footer className="mt-24 pt-8 border-t border-gray-200 text-center text-sm text-gray-400">
-          &copy; 2026 AZ-Tokyo
-      </footer>
       </div>
-    </div>
+    </>
   );
 }
