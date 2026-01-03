@@ -1,10 +1,16 @@
-import { Accordion, AccordionContent, AccordionSummary } from "./components/digital-go-jp/Accordion"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionSummary,
+} from './components/digital-go-jp/Accordion'
 
 export default function App() {
   return (
     <>
-      <h1 className="sticky font-sans top-0 px-8 py-4 z-10 shadow-1 text-std-45B-140">デジタル資産相続ツール</h1>
-      
+      <h1 className="sticky font-sans top-0 px-8 py-4 z-10 shadow-1 text-std-45B-140">
+        デジタル資産相続ツール
+      </h1>
+
       <div className="px-16 py-8 flex flex-col">
         <Accordion>
           <AccordionSummary>
@@ -22,9 +28,7 @@ export default function App() {
             <h3>使い方</h3>
           </AccordionSummary>
           <AccordionContent>
-            <p>
-              「データをスキャンする」のボタンから追加できます。
-            </p>
+            <p>「データをスキャンする」のボタンから追加できます。</p>
           </AccordionContent>
         </Accordion>
       </div>

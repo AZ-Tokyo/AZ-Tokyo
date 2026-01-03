@@ -1,5 +1,1 @@
-export {
-  Dd,
-  Dl,
-  Dt,
-} from './Dl';
+export { Dd, Dl, Dt } from './Dl'

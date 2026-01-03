@@ -4,4 +4,4 @@ export {
   BreadcrumbList,
   Breadcrumbs,
   BreadcrumbsLabel,
-} from './Breadcrumbs';
+} from './Breadcrumbs'

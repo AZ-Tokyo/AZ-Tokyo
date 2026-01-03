@@ -1,11 +1,11 @@
-import type { ComponentProps } from 'react';
+import type { ComponentProps } from 'react'
 
 type Props = ComponentProps<'button'> & {
-  label?: string;
-};
+  label?: string
+}
 
 export const NotificationBannerClose = (props: Props) => {
-  const { className, label, ...rest } = props;
+  const { className, label, ...rest } = props
 
   return (
     <button
@@ -15,25 +15,25 @@ export const NotificationBannerClose = (props: Props) => {
         focus-visible:bg-yellow-300 focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-[calc(2/16*1rem)] focus-visible:outline-black focus-visible:ring-[calc(2/16*1rem)] focus-visible:ring-yellow-300
         ${className ?? ''}
       `}
-      type='button'
+      type="button"
       {...rest}
     >
       <svg
         aria-hidden={true}
-        className='mt-0.5 size-6'
-        fill='none'
-        height='24'
-        viewBox='0 0 24 24'
-        width='24'
+        className="mt-0.5 size-6"
+        fill="none"
+        height="24"
+        viewBox="0 0 24 24"
+        width="24"
       >
         <g>
           <path
-            d='m6.4 18.6-1-1 5.5-5.6-5.6-5.6 1.1-1 5.6 5.5 5.6-5.6 1 1.1L13 12l5.6 5.6-1 1L12 13l-5.6 5.6Z'
-            fill='currentColor'
+            d="m6.4 18.6-1-1 5.5-5.6-5.6-5.6 1.1-1 5.6 5.5 5.6-5.6 1 1.1L13 12l5.6 5.6-1 1L12 13l-5.6 5.6Z"
+            fill="currentColor"
           />
         </g>
       </svg>
-      <span className='text-oln-16N-100'>{label ?? '閉じる'}</span>
+      <span className="text-oln-16N-100">{label ?? '閉じる'}</span>
     </button>
-  );
-};
+  )
+}

@@ -1,1 +1,1 @@
-export { Ol, olStyle } from './Ol';
+export { Ol, olStyle } from './Ol'
