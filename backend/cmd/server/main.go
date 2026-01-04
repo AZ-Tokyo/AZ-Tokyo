@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
@@ -15,6 +16,7 @@ import (
 )
 
 func main() {
+	ctx := context.Background()
 	appEnv := os.Getenv("APP_ENV")
 
 	var dsn string
@@ -40,7 +42,7 @@ func main() {
 		log.Fatalf("failed to migrate database: %v", err)
 	}
 
-	userRepo := repository.NewUserRepository(db)
+	userRepo := repository.NewUserRepository(ctx, db)
 	userService := service.NewUserService(userRepo)
 	h := handler.NewHandler(userService)
 
