@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"context"
 	"testing"
 
 	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/model"
@@ -16,6 +17,7 @@ type UserRepositoryTestSuite struct {
 }
 
 func (s *UserRepositoryTestSuite) SetupTest() {
+	ctx := context.Background()
 	db, err := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
 	s.NoError(err)
 	if err := db.AutoMigrate(&model.User{}); err != nil {
@@ -23,7 +25,7 @@ func (s *UserRepositoryTestSuite) SetupTest() {
 	}
 
 	s.db = db
-	s.repo = NewUserRepository(db)
+	s.repo = NewUserRepository(ctx, db)
 }
 
 func (s *UserRepositoryTestSuite) TestFindAll_Success() {

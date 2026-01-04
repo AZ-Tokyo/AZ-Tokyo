@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"context"
+
 	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/model"
 	"gorm.io/gorm"
 )
@@ -11,11 +13,15 @@ type UserRepository interface {
 }
 
 type userRepository struct {
-	db *gorm.DB
+	ctx context.Context
+	db  *gorm.DB
 }
 
-func NewUserRepository(db *gorm.DB) UserRepository {
-	return &userRepository{db: db}
+func NewUserRepository(ctx context.Context, db *gorm.DB) UserRepository {
+	return &userRepository{
+		ctx: ctx,
+		db:  db,
+	}
 }
 
 func (r *userRepository) FindAll() ([]model.User, error) {
