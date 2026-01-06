@@ -1,9 +1,9 @@
-import type { ComponentProps } from 'react';
+import type { ComponentProps } from 'react'
 
-type Props = ComponentProps<'div'>;
+type Props = ComponentProps<'div'>
 
 export const NotificationBannerBody = (props: Props) => {
-  const { className, children, ...rest } = props;
+  const { className, children, ...rest } = props
 
   return (
     <div
@@ -15,5 +15,5 @@ export const NotificationBannerBody = (props: Props) => {
     >
       {children}
     </div>
-  );
-};
+  )
+}

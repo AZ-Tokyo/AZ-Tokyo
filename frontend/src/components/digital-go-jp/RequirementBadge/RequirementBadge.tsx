@@ -1,11 +1,11 @@
-import type { ComponentProps } from 'react';
+import type { ComponentProps } from 'react'
 
 export type RequirementBadgeProps = ComponentProps<'span'> & {
-  isOptional?: boolean;
-};
+  isOptional?: boolean
+}
 
 export const RequirementBadge = (props: RequirementBadgeProps) => {
-  const { children, className, isOptional, ...rest } = props;
+  const { children, className, isOptional, ...rest } = props
 
   return (
     <span
@@ -19,5 +19,5 @@ export const RequirementBadge = (props: RequirementBadgeProps) => {
     >
       {children}
     </span>
-  );
-};
+  )
+}

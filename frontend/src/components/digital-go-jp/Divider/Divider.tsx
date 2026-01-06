@@ -1,13 +1,13 @@
-import type { ComponentProps } from 'react';
+import type { ComponentProps } from 'react'
 
-export type DividerColor = 'gray-420' | 'gray-536' | 'black';
+export type DividerColor = 'gray-420' | 'gray-536' | 'black'
 
 export type DividerProps = ComponentProps<'hr'> & {
-  color?: DividerColor;
-};
+  color?: DividerColor
+}
 
 export const Divider = (props: DividerProps) => {
-  const { className, color = 'gray-420', ...rest } = props;
+  const { className, color = 'gray-420', ...rest } = props
 
   return (
     <hr
@@ -18,5 +18,5 @@ export const Divider = (props: DividerProps) => {
       data-color={color}
       {...rest}
     ></hr>
-  );
-};
+  )
+}

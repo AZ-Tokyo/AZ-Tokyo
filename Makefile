@@ -14,6 +14,7 @@ help:
 	@echo "  make up            - Start Docker containers in detached mode"
 	@echo "  make down          - Stop and remove Docker containers"
 	@echo "  make build         - Build Docker images"
+	@echo "  make gen-types     - Generate TypeScript types from Go structs"
 
 # ---------------------------------------------------------
 # Install dependencies
@@ -32,6 +33,8 @@ install-frontend:
 # ---------------------------------------------------------
 .PHONY: dev dev-backend dev-frontend
 dev:
+	@echo "Starting database..."
+	docker compose up -d db
 	@echo "Starting both backend and frontend..."
 	@$(MAKE) -j2 dev-backend dev-frontend
 
@@ -65,3 +68,10 @@ down:
 
 build:
 	docker compose build --no-cache
+
+# ---------------------------------------------------------
+# Code Generation
+# ---------------------------------------------------------
+.PHONY: gen-types
+gen-types: install-backend
+	cd $(BACKEND_DIR) && $(GO_CMD) run github.com/gzuidhof/tygo@latest generate

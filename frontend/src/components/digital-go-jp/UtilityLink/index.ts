@@ -1,1 +1,5 @@
-export { UtilityLink, UtilityLinkExternalLinkIcon, utilityLinkStyle } from './UtilityLink';
+export {
+  UtilityLink,
+  UtilityLinkExternalLinkIcon,
+  utilityLinkStyle,
+} from './UtilityLink'

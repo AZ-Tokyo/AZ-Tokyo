@@ -1,14 +1,14 @@
-import type { ComponentProps } from 'react';
+import type { ComponentProps } from 'react'
 
-export type EmergencyBannerHeadingLevel = 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+export type EmergencyBannerHeadingLevel = 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
 
 type EmergencyBannerHeadingProps = ComponentProps<'h2'> & {
-  level: EmergencyBannerHeadingLevel;
-};
+  level: EmergencyBannerHeadingLevel
+}
 
 export const EmergencyBannerHeading = (props: EmergencyBannerHeadingProps) => {
-  const { level, className, children, ...rest } = props;
-  const Tag = level;
+  const { level, className, children, ...rest } = props
+  const Tag = level
 
   return (
     <Tag
@@ -21,5 +21,5 @@ export const EmergencyBannerHeading = (props: EmergencyBannerHeadingProps) => {
       【緊急】
       {children}
     </Tag>
-  );
-};
+  )
+}

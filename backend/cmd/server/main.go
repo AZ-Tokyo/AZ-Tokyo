@@ -9,6 +9,7 @@ import (
 	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/model"
 	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/repository"
 	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/router"
+	"github.com/AZ-Tokyo/AZ-Tokyo/backend/internal/service"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -40,7 +41,8 @@ func main() {
 	}
 
 	userRepo := repository.NewUserRepository(db)
-	h := handler.NewHandler(userRepo)
+	userService := service.NewUserService(userRepo)
+	h := handler.NewHandler(userService)
 
 	r := router.Setup(h)
 	if err := r.Run(":8080"); err != nil {

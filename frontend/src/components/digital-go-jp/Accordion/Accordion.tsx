@@ -1,9 +1,9 @@
-import type { ComponentProps } from 'react';
+import type { ComponentProps } from 'react'
 
-export type AccordionProps = ComponentProps<'details'>;
+export type AccordionProps = ComponentProps<'details'>
 
 export const Accordion = (props: AccordionProps) => {
-  const { children, className, ...rest } = props;
+  const { children, className, ...rest } = props
 
   return (
     <details
@@ -16,13 +16,13 @@ export const Accordion = (props: AccordionProps) => {
     >
       {children}
     </details>
-  );
-};
+  )
+}
 
-export type AccordionSummaryProps = ComponentProps<'summary'>;
+export type AccordionSummaryProps = ComponentProps<'summary'>
 
 export const AccordionSummary = (props: AccordionSummaryProps) => {
-  const { children, className, ...rest } = props;
+  const { children, className, ...rest } = props
 
   return (
     <summary
@@ -45,29 +45,29 @@ export const AccordionSummary = (props: AccordionSummaryProps) => {
       >
         <svg
           aria-hidden={true}
-          className='pointer-events-none mt-0.5 size-4 desktop:size-auto'
-          width='20'
-          height='20'
-          viewBox='0 0 20 20'
-          fill='none'
+          className="pointer-events-none mt-0.5 size-4 desktop:size-auto"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
         >
           <g>
             <path
-              d='M16.668 5.5L10.0013 12.1667L3.33464 5.5L2.16797 6.66667L10.0013 14.5L17.8346 6.66667L16.668 5.5Z'
-              fill='currentColor'
+              d="M16.668 5.5L10.0013 12.1667L3.33464 5.5L2.16797 6.66667L10.0013 14.5L17.8346 6.66667L16.668 5.5Z"
+              fill="currentColor"
             />
           </g>
         </svg>
       </span>
       {children}
     </summary>
-  );
-};
+  )
+}
 
-export type AccordionContentProps = ComponentProps<'div'>;
+export type AccordionContentProps = ComponentProps<'div'>
 
 export const AccordionContent = (props: AccordionContentProps) => {
-  const { children, className, ...rest } = props;
+  const { children, className, ...rest } = props
   return (
     <div
       className={`
@@ -79,13 +79,13 @@ export const AccordionContent = (props: AccordionContentProps) => {
     >
       {children}
     </div>
-  );
-};
+  )
+}
 
-export type AccordionBackLinkProps = ComponentProps<'a'>;
+export type AccordionBackLinkProps = ComponentProps<'a'>
 
 export const AccordionBackLink = (props: AccordionBackLinkProps) => {
-  const { className, children, href, ...rest } = props;
+  const { className, children, href, ...rest } = props
 
   return (
     <a
@@ -102,20 +102,20 @@ export const AccordionBackLink = (props: AccordionBackLinkProps) => {
     >
       <svg
         aria-hidden={true}
-        className='mt-[calc((1lh-24px)/2)] shrink-0'
-        width='24'
-        height='24'
-        viewBox='0 0 24 24'
-        fill='none'
+        className="mt-[calc((1lh-24px)/2)] shrink-0"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
       >
         <g>
           <path
-            d='M5 7L7 7L7 14.1C7 15.15 7.33333 16.0625 8 16.8375C8.66667 17.6125 9.5 18 10.5 18C11.5 18 12.3333 17.6125 13 16.8375C13.6667 16.0625 14 15.15 14 14.1L14 7.8L11.4 10.4L10 9L15 4L20 9L18.6 10.4L16 7.8V14.1C16 15.7167 15.475 17.1042 14.425 18.2625C13.375 19.4208 12.0667 20 10.5 20C8.93333 20 7.625 19.4208 6.575 18.2625C5.525 17.1042 5 15.7167 5 14.1L5 7Z'
-            fill='currentColor'
+            d="M5 7L7 7L7 14.1C7 15.15 7.33333 16.0625 8 16.8375C8.66667 17.6125 9.5 18 10.5 18C11.5 18 12.3333 17.6125 13 16.8375C13.6667 16.0625 14 15.15 14 14.1L14 7.8L11.4 10.4L10 9L15 4L20 9L18.6 10.4L16 7.8V14.1C16 15.7167 15.475 17.1042 14.425 18.2625C13.375 19.4208 12.0667 20 10.5 20C8.93333 20 7.625 19.4208 6.575 18.2625C5.525 17.1042 5 15.7167 5 14.1L5 7Z"
+            fill="currentColor"
           />
         </g>
       </svg>
       {children}
     </a>
-  );
-};
+  )
+}

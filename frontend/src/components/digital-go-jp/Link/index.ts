@@ -7,4 +7,4 @@ export {
   linkHoverStyle,
   linkStyle,
   linkVisitedStyle,
-} from './Link';
+} from './Link'

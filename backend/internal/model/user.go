@@ -7,11 +7,11 @@ import (
 )
 
 type User struct {
-	gorm.Model
-	Name string `gorm:"size:255" json:"name"`
-	BirthDate *time.Time `json:"birth_date"`
-	DeathDate *time.Time `json:"death_date"`
-	LegalDomicile *string `gorm:"size:255" json:"legal_domicile"`
-	LastAddress *string `gorm:"size:255" json:"last_address"`
-	Remarks *string `gorm:"type:text" json:"remarks"`
+	gorm.Model    `tstype:",extends,required"`
+	Name          string `gorm:"size:255" binding:"required"`
+	BirthDate     *time.Time
+	DeathDate     *time.Time
+	LegalDomicile *string `gorm:"size:255"`
+	LastAddress   *string `gorm:"size:255"`
+	Remarks       *string `gorm:"type:text"`
 }

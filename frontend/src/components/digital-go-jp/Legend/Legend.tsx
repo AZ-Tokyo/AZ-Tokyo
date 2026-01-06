@@ -1,13 +1,13 @@
-import type { ComponentProps } from 'react';
+import type { ComponentProps } from 'react'
 
-export type LegendSize = 'lg' | 'md' | 'sm';
+export type LegendSize = 'lg' | 'md' | 'sm'
 
 export type LegendProps = ComponentProps<'legend'> & {
-  size?: LegendSize;
-};
+  size?: LegendSize
+}
 
 export const Legend = (props: LegendProps) => {
-  const { children, className, size = 'md', ...rest } = props;
+  const { children, className, size = 'md', ...rest } = props
 
   return (
     <legend
@@ -21,5 +21,5 @@ export const Legend = (props: LegendProps) => {
     >
       {children}
     </legend>
-  );
-};
+  )
+}

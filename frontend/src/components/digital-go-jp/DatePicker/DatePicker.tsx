@@ -1,69 +1,82 @@
-'use client';
+'use client'
 
-import { type ComponentProps, type KeyboardEvent, type Ref, useRef } from 'react';
+import {
+  type ComponentProps,
+  type KeyboardEvent,
+  type Ref,
+  useRef,
+} from 'react'
 
-export type DatePickerSize = 'lg' | 'md' | 'sm';
+export type DatePickerSize = 'lg' | 'md' | 'sm'
 
 export type DatePickerProps = Omit<ComponentProps<'div'>, 'children'> & {
-  size?: DatePickerSize;
-  isError?: boolean;
-  isReadonly?: boolean;
-  isDisabled?: boolean;
+  size?: DatePickerSize
+  isError?: boolean
+  isReadonly?: boolean
+  isDisabled?: boolean
   children: (props: {
-    yearRef: Ref<HTMLInputElement>;
-    monthRef: Ref<HTMLInputElement>;
-    dateRef: Ref<HTMLInputElement>;
-    readOnly?: boolean;
-    'aria-disabled'?: boolean;
-    'aria-invalid'?: boolean;
-  }) => JSX.Element;
-};
+    yearRef: Ref<HTMLInputElement>
+    monthRef: Ref<HTMLInputElement>
+    dateRef: Ref<HTMLInputElement>
+    readOnly?: boolean
+    'aria-disabled'?: boolean
+    'aria-invalid'?: boolean
+  }) => JSX.Element
+}
 
 export const DatePicker = (props: DatePickerProps) => {
-  const { className, size = 'lg', isError, isReadonly, isDisabled, children, ...rest } = props;
+  const {
+    className,
+    size = 'lg',
+    isError,
+    isReadonly,
+    isDisabled,
+    children,
+    ...rest
+  } = props
 
-  const yearRef = useRef<HTMLInputElement>(null);
-  const monthRef = useRef<HTMLInputElement>(null);
-  const dateRef = useRef<HTMLInputElement>(null);
+  const yearRef = useRef<HTMLInputElement>(null)
+  const monthRef = useRef<HTMLInputElement>(null)
+  const dateRef = useRef<HTMLInputElement>(null)
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     if (event.key === 'ArrowRight') {
-      moveRight(event);
+      moveRight(event)
     } else if (event.key === 'ArrowLeft') {
-      moveLeft(event);
+      moveLeft(event)
     } else if (event.key.match(/^[^0-9]$/)) {
       if (!event.ctrlKey && !event.metaKey) {
-        event.preventDefault();
+        event.preventDefault()
       }
     }
   }
 
   function moveRight(event: KeyboardEvent<HTMLInputElement>) {
-    const input = event.target as HTMLInputElement;
+    const input = event.target as HTMLInputElement
     if (input.selectionStart !== input.selectionEnd) {
-      return;
+      return
     }
     if (input.selectionEnd === input.value.length) {
-      event.preventDefault();
+      event.preventDefault()
       if (input === yearRef.current) {
-        monthRef.current?.focus();
+        monthRef.current?.focus()
       } else if (input === monthRef.current) {
-        dateRef.current?.focus();
+        dateRef.current?.focus()
       }
     }
   }
 
   function moveLeft(event: KeyboardEvent<HTMLInputElement>) {
-    const input = event.target as HTMLInputElement;
+    const input = event.target as HTMLInputElement
     if (input.selectionStart !== input.selectionEnd) {
-      return;
+      return
     }
     if (input.selectionStart === 0) {
-      event.preventDefault();
+      event.preventDefault()
       if (input === monthRef.current) {
-        yearRef.current?.focus();
+        yearRef.current?.focus()
       } else if (input === dateRef.current) {
-        monthRef.current?.focus();
+        monthRef.current?.focus()
       }
     }
   }
@@ -88,5 +101,5 @@ export const DatePicker = (props: DatePickerProps) => {
         'aria-invalid': isError,
       })}
     </div>
-  );
-};
+  )
+}
