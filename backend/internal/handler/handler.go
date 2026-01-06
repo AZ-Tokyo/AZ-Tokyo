@@ -16,27 +16,27 @@ func NewHandler(userService service.UserService) *Handler {
 	return &Handler{UserService: userService}
 }
 
-func (h *Handler) GetAllUsers(c *gin.Context) {
+func (h *Handler) GetAllUsers(ctx *gin.Context) {
 	users, err := h.UserService.FindAll()
 	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
 	}
 
-	c.JSON(http.StatusOK, users)
+	ctx.JSON(http.StatusOK, users)
 }
 
-func (h *Handler) CreateUser(c *gin.Context) {
+func (h *Handler) CreateUser(ctx *gin.Context) {
 	var user model.User
-	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := ctx.ShouldBindJSON(&user); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
 	if err := h.UserService.Create(&user); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
 		return
 	}
 
-	c.JSON(http.StatusCreated, user)
+	ctx.JSON(http.StatusCreated, user)
 }
