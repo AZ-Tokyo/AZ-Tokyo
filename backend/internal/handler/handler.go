@@ -17,7 +17,7 @@ func NewHandler(userService service.UserService) *Handler {
 }
 
 func (h *Handler) GetAllUsers(ctx *gin.Context) {
-	users, err := h.UserService.FindAll()
+	users, err := h.UserService.FindAll(ctx)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
 		return
@@ -33,7 +33,7 @@ func (h *Handler) CreateUser(ctx *gin.Context) {
 		return
 	}
 
-	if err := h.UserService.Create(&user); err != nil {
+	if err := h.UserService.Create(ctx, &user); err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create user"})
 		return
 	}

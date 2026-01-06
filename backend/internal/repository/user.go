@@ -8,27 +8,23 @@ import (
 )
 
 type UserRepository interface {
-	FindAll() ([]model.User, error)
-	Create(user *model.User) error
+	FindAll(ctx context.Context) ([]model.User, error)
+	Create(ctx context.Context, user *model.User) error
 }
 
 type userRepository struct {
-	ctx context.Context
-	db  *gorm.DB
+	db *gorm.DB
 }
 
-func NewUserRepository(ctx context.Context, db *gorm.DB) UserRepository {
-	return &userRepository{
-		ctx: ctx,
-		db:  db,
-	}
+func NewUserRepository(db *gorm.DB) UserRepository {
+	return &userRepository{db: db}
 }
 
-func (r *userRepository) FindAll() ([]model.User, error) {
-	users, err := gorm.G[model.User](r.db).Find(r.ctx)
+func (r *userRepository) FindAll(ctx context.Context) ([]model.User, error) {
+	users, err := gorm.G[model.User](r.db).Find(ctx)
 	return users, err
 }
 
-func (r *userRepository) Create(user *model.User) error {
-	return gorm.G[model.User](r.db).Create(r.ctx, user)
+func (r *userRepository) Create(ctx context.Context, user *model.User) error {
+	return gorm.G[model.User](r.db).Create(ctx, user)
 }
