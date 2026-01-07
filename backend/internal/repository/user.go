@@ -28,3 +28,11 @@ func (r *userRepository) FindAll(ctx context.Context) ([]model.User, error) {
 func (r *userRepository) Create(ctx context.Context, user *model.User) error {
 	return gorm.G[model.User](r.db).Create(ctx, user)
 }
+
+func (r *userRepository) UpdateRecord(ctx context.Context, newUser model.User) error {
+	_, err := gorm.G[model.User](r.db).Where("id = ?", newUser.ID).Updates(ctx, newUser)
+	if err != nil {
+		err = r.Create(ctx, &newUser)
+	}
+	return err
+}
