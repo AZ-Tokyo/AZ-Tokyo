@@ -17,7 +17,6 @@ type UserRepositoryTestSuite struct {
 }
 
 func (s *UserRepositoryTestSuite) SetupTest() {
-	ctx := context.Background()
 	db, err := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
 	s.NoError(err)
 	if err := db.AutoMigrate(&model.User{}); err != nil {
@@ -25,14 +24,15 @@ func (s *UserRepositoryTestSuite) SetupTest() {
 	}
 
 	s.db = db
-	s.repo = NewUserRepository(ctx, db)
+	s.repo = NewUserRepository(db)
 }
 
 func (s *UserRepositoryTestSuite) TestFindAll_Success() {
+	ctx := context.Background()
 	testUser := model.User{Name: "Test User"}
-	s.db.Create(&testUser)
 
-	users, err := s.repo.FindAll()
+	s.db.Create(&testUser)
+	users, err := s.repo.FindAll(ctx)
 
 	s.NoError(err)
 	s.Len(users, 1)
@@ -40,16 +40,18 @@ func (s *UserRepositoryTestSuite) TestFindAll_Success() {
 }
 
 func (s *UserRepositoryTestSuite) TestFindAll_Empty() {
-	users, err := s.repo.FindAll()
+	ctx := context.Background()
+	users, err := s.repo.FindAll(ctx)
 
 	s.NoError(err)
 	s.Len(users, 0)
 }
 
 func (s *UserRepositoryTestSuite) TestCreate_Success() {
+	ctx := context.Background()
 	user := &model.User{Name: "Yamada"}
 
-	err := s.repo.Create(user)
+	err := s.repo.Create(ctx, user)
 
 	s.NoError(err)
 	s.NotZero(user.ID)
@@ -61,10 +63,11 @@ func (s *UserRepositoryTestSuite) TestCreate_Success() {
 }
 
 func (s *UserRepositoryTestSuite) TestCreate_Error() {
+	ctx := context.Background()
 	s.NoError(s.db.Migrator().DropTable(&model.User{}))
 
 	user := &model.User{Name: "Error User"}
-	err := s.repo.Create(user)
+	err := s.repo.Create(ctx, user)
 
 	s.Error(err)
 }
