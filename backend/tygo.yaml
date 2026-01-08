@@ -9,9 +9,9 @@ packages:
     fallback_type: "any"
     frontmatter: |
       export interface GormModel {
-        ID: number;
-        CreatedAt: string;
-        UpdatedAt: string;
-        DeletedAt: string | null;
+        ID: number
+        CreatedAt: string
+        UpdatedAt: string
+        DeletedAt: string | null
       }
 
