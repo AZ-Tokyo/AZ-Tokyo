@@ -42,31 +42,6 @@ export default function App() {
       </h1>
 
       <div className="px-16 py-8 flex flex-col gap-8">
-        <div className="flex flex-col">
-          <Accordion>
-            <AccordionSummary>
-              <h3>デジタル資産相続ツールについて</h3>
-            </AccordionSummary>
-            <AccordionContent>
-              <p>
-                「法令」×「デジタル」で開発するツールです。
-                <br />
-                スマートフォンやデバイスに記録されているデータから、故人が保有していたデジタル資産をデータ化し、相続の可否を自動で判定します。
-              </p>
-            </AccordionContent>
-          </Accordion>
-          <Accordion>
-            <AccordionSummary>
-              <h3>使い方</h3>
-            </AccordionSummary>
-            <AccordionContent>
-              <p>「データをスキャンする」のボタンから追加できます。</p>
-            </AccordionContent>
-          </Accordion>
-        </div>
-
-        <Divider />
-
         <main>
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
