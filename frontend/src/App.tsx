@@ -1,11 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  Accordion,
-  AccordionContent,
-  AccordionSummary,
-  Button,
-  Divider,
-} from './components/digital-go-jp'
+import { Button } from './components/digital-go-jp'
 import { PersonCard } from './components/PersonCard'
 import type { User } from './types/model'
 
