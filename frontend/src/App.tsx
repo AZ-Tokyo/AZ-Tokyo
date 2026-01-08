@@ -1,31 +1,39 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
 import {
   Accordion,
   AccordionContent,
   AccordionSummary,
   Button,
   Divider,
-} from "./components/digital-go-jp";
-import { PersonCard } from "./components/PersonCard";
-import type { User } from "./types/model";
+} from './components/digital-go-jp'
+import { PersonCard } from './components/PersonCard'
+import type { User } from './types/model'
 
 export default function App() {
-  const [deceasedPersons, setDeceasedPersons] = useState<User[]>([]);
+  const [deceasedPersons, setDeceasedPersons] = useState<User[]>([])
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("/api/users");
-        if (!response.ok) throw new Error("Network response was not ok");
-        const data: User[] = await response.json();
-        setDeceasedPersons(data);
+        const response = await fetch('/api/users')
+        if (!response.ok) throw new Error('Network response was not ok')
+        const data: User[] = await response.json()
+        setDeceasedPersons(data)
       } catch (error) {
-        console.error("Failed to fetch users:", error);
+        console.error('Failed to fetch users:', error)
       }
-    };
+    }
 
-    fetchUsers();
-  }, []);
+    fetchUsers()
+  }, [])
+
+  const handleClick = () => {
+    // TODO: 画面遷移処理を追加する
+  }
+
+  const handleDelete = () => {
+    // TODO: 削除 API を呼び出し、画面から項目を削除する
+  }
 
   return (
     <>
@@ -41,7 +49,8 @@ export default function App() {
             </AccordionSummary>
             <AccordionContent>
               <p>
-                「法令」×「デジタル」で開発するツールです。<br />
+                「法令」×「デジタル」で開発するツールです。
+                <br />
                 スマートフォンやデバイスに記録されているデータから、故人が保有していたデジタル資産をデータ化し、相続の可否を自動で判定します。
               </p>
             </AccordionContent>
@@ -51,9 +60,7 @@ export default function App() {
               <h3>使い方</h3>
             </AccordionSummary>
             <AccordionContent>
-              <p>
-                「データをスキャンする」のボタンから追加できます。
-              </p>
+              <p>「データをスキャンする」のボタンから追加できます。</p>
             </AccordionContent>
           </Accordion>
         </div>
@@ -76,11 +83,16 @@ export default function App() {
 
           <div className="grid gap-6">
             {deceasedPersons.map((person) => (
-              <PersonCard key={person.ID} person={person} />
+              <PersonCard
+                key={person.ID}
+                person={person}
+                onClick={() => handleClick()}
+                onDelete={() => handleDelete()}
+              />
             ))}
           </div>
         </main>
       </div>
     </>
-  );
+  )
 }
