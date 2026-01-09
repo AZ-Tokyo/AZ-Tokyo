@@ -15,7 +15,9 @@ export const CreateUser = () => {
   })
   const [loading, setLoading] = useState(false)
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
   }
@@ -26,8 +28,12 @@ export const CreateUser = () => {
 
     const payload: Omit<User, keyof GormModel> = {
       Name: formData.Name || '',
-      BirthDate: formData.BirthDate ? `${formData.BirthDate}T00:00:00Z` : undefined,
-      DeathDate: formData.DeathDate ? `${formData.DeathDate}T00:00:00Z` : undefined,
+      BirthDate: formData.BirthDate
+        ? `${formData.BirthDate}T00:00:00Z`
+        : undefined,
+      DeathDate: formData.DeathDate
+        ? `${formData.DeathDate}T00:00:00Z`
+        : undefined,
       LegalDomicile: formData.LegalDomicile,
       LastAddress: formData.LastAddress,
       Remarks: formData.Remarks,
@@ -69,7 +75,10 @@ export const CreateUser = () => {
         </Button>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-6 bg-white p-8 border border-gray-100 rounded-2xl shadow-sm">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-6 bg-white p-8 border border-gray-100 rounded-2xl shadow-sm"
+      >
         <div className="flex flex-col gap-2">
           <Label htmlFor="Name">氏名 (必須)</Label>
           <Input
