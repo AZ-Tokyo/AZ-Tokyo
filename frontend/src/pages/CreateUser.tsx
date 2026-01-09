@@ -1,6 +1,12 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, Input, Label, Textarea } from '../components/digital-go-jp'
+import {
+  Button,
+  Input,
+  Label,
+  Textarea,
+  RequirementBadge,
+} from '../components/digital-go-jp'
 import { createUser } from '../services/api'
 import type { GormModel, User } from '../types/model'
 
@@ -65,12 +71,12 @@ export const CreateUser = () => {
         </Button>
       </div>
 
-      <form
-        onSubmit={handleSubmit}
-        className="form-card"
-      >
+      <form onSubmit={handleSubmit} className="form-card">
         <div className="form-group">
-          <Label htmlFor="Name">氏名 (必須)</Label>
+          <Label htmlFor="Name">
+            氏名
+            <RequirementBadge>*</RequirementBadge>
+          </Label>
           <Input
             id="Name"
             name="Name"
