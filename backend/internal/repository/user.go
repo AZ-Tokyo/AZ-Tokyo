@@ -10,6 +10,7 @@ import (
 type UserRepository interface {
 	FindAll(ctx context.Context) ([]model.User, error)
 	Create(ctx context.Context, user *model.User) error
+	UpdateRecord(ctx context.Context, newUser model.User) error
 }
 
 type userRepository struct {

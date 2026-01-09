@@ -10,6 +10,7 @@ import (
 type UserService interface {
 	FindAll(ctx context.Context) ([]model.User, error)
 	Create(ctx context.Context, user *model.User) error
+	UpdateRecord(ctx context.Context, newUser model.User) error
 }
 
 type userService struct {
@@ -26,4 +27,8 @@ func (s *userService) FindAll(ctx context.Context) ([]model.User, error) {
 
 func (s *userService) Create(ctx context.Context, user *model.User) error {
 	return s.repo.Create(ctx, user)
+}
+
+func (s *userService) UpdateRecord(ctx context.Context, user model.User) error {
+	return s.repo.UpdateRecord(ctx, user)
 }
