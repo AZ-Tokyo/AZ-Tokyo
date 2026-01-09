@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button, Input, Label, Textarea } from '../components/digital-go-jp'
+import { createUser } from '../services/api'
 import type { GormModel, User } from '../types/model'
 
 export const CreateUser = () => {
@@ -40,18 +41,7 @@ export const CreateUser = () => {
     }
 
     try {
-      const response = await fetch('/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to create user')
-      }
-
+      await createUser(payload)
       navigate('/')
     } catch (error) {
       console.error('Error creating user:', error)
@@ -62,7 +52,7 @@ export const CreateUser = () => {
   }
 
   return (
-    <div className="px-16 py-8 flex flex-col gap-8 max-w-4xl mx-auto">
+    <div className="page-main max-w-4xl mx-auto">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-800">新規登録</h2>
         <Button
@@ -77,9 +67,9 @@ export const CreateUser = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-6 bg-white p-8 border border-gray-100 rounded-2xl shadow-sm"
+        className="form-card"
       >
-        <div className="flex flex-col gap-2">
+        <div className="form-group">
           <Label htmlFor="Name">氏名 (必須)</Label>
           <Input
             id="Name"
@@ -92,7 +82,7 @@ export const CreateUser = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="flex flex-col gap-2">
+          <div className="form-group">
             <Label htmlFor="BirthDate">生年月日</Label>
             <Input
               id="BirthDate"
@@ -103,7 +93,7 @@ export const CreateUser = () => {
             />
           </div>
 
-          <div className="flex flex-col gap-2">
+          <div className="form-group">
             <Label htmlFor="DeathDate">死亡年月日</Label>
             <Input
               id="DeathDate"
@@ -115,7 +105,7 @@ export const CreateUser = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="form-group">
           <Label htmlFor="LegalDomicile">本籍</Label>
           <Input
             id="LegalDomicile"
@@ -126,7 +116,7 @@ export const CreateUser = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="form-group">
           <Label htmlFor="LastAddress">最後の住所</Label>
           <Input
             id="LastAddress"
@@ -137,7 +127,7 @@ export const CreateUser = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="form-group">
           <Label htmlFor="Remarks">備考</Label>
           <Textarea
             id="Remarks"

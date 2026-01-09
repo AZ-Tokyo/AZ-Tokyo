@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '../components/digital-go-jp'
 import { PersonCard } from '../components/PersonCard'
+import { getUsers } from '../services/api'
 import type { User } from '../types/model'
 
 export const Home = () => {
@@ -11,9 +12,7 @@ export const Home = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch('/api/users')
-        if (!response.ok) throw new Error('Network response was not ok')
-        const data: User[] = await response.json()
+        const data = await getUsers()
         setDeceasedPersons(data)
       } catch (error) {
         console.error('Failed to fetch users:', error)
@@ -36,7 +35,7 @@ export const Home = () => {
   }
 
   return (
-    <div className="px-16 py-8 flex flex-col gap-8">
+    <div className="page-main">
       <main>
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold text-gray-800 flex items-center gap-2">

@@ -5,7 +5,7 @@ import { Home } from './pages/Home'
 export default function App() {
   return (
     <BrowserRouter>
-      <h1 className="sticky font-sans top-0 px-8 py-4 z-10 shadow-1 text-std-45B-140 bg-white">
+      <h1 className="app-header shadow-1 text-std-45B-140">
         デジタル資産相続ツール
       </h1>
 
