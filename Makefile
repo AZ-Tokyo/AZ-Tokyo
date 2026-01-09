@@ -15,6 +15,7 @@ help:
 	@echo "  make down          - Stop and remove Docker containers"
 	@echo "  make build         - Build Docker images"
 	@echo "  make gen-types     - Generate TypeScript types from Go structs"
+	@echo "  make format        - Format TypeScript and Go files"
 
 # ---------------------------------------------------------
 # Install dependencies
@@ -75,3 +76,16 @@ build:
 .PHONY: gen-types
 gen-types: install-backend
 	cd $(BACKEND_DIR) && $(GO_CMD) run github.com/gzuidhof/tygo@latest generate
+
+
+# ---------------------------------------------------------
+# Code Formatting
+# ---------------------------------------------------------
+.PHONY: format
+format: format-backend format-frontend
+
+format-backend:
+	cd $(BACKEND_DIR) && $(GO_CMD) fmt ./...
+
+format-frontend:
+	cd $(FRONTEND_DIR) && $(NPM_CMD) run format
