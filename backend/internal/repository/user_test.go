@@ -58,10 +58,9 @@ func (s *UserRepositoryTestSuite) TestCreate_Success() {
 	s.NoError(err)
 	s.NotZero(user.ID)
 
-	var dbUser model.User
-	result := s.db.First(&dbUser, user.ID)
-	s.NoError(result.Error)
-	s.Equal("Yamada", dbUser.Name)
+	result, err := gorm.G[model.User](s.db).Where("id = ?", user.ID).First(ctx)
+	s.NoError(err)
+	s.Equal("Yamada", result.Name)
 }
 
 func (s *UserRepositoryTestSuite) TestCreate_Error() {
