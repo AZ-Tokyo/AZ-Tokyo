@@ -115,7 +115,7 @@ func TestUpdateRecord_Error(t *testing.T) {
 
 	mockRepo := new(MockUserRepository)
 	user := model.User{Name: "New 42Tokyo"}
-	mockRepo.On("UpdateRecord", mock.Anything, user).Return(errors.New("Not found record"))
+	mockRepo.On("UpdateRecord", mock.Anything, user).Return(errors.New("Record of user not found"))
 
 	service := NewUserService(mockRepo)
 	err := service.UpdateRecord(ctx, user)
