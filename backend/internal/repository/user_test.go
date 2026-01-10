@@ -111,7 +111,7 @@ func (s *UserRepositoryTestSuite) TestUpdateRecord_Success() {
 	user2.Name = "New 42Tokyo"
 	user2.DeathDate = &deathDate2
 
-	// Update user1 with user1
+	// Update user1 record with user2 data
 	err = s.repo.UpdateRecord(ctx, user2)
 	s.NoError(err)
 
