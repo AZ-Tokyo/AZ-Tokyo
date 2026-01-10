@@ -28,7 +28,7 @@ describe('CreateUser Page', () => {
     expect(
       screen.getByRole('heading', { level: 2, name: /新規登録/i }),
     ).toBeInTheDocument()
-    expect(screen.getByLabelText(/氏名 \(必須\)/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/氏名/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: '登録する' })).toBeInTheDocument()
   })
 
@@ -39,7 +39,7 @@ describe('CreateUser Page', () => {
       </MemoryRouter>,
     )
 
-    fireEvent.change(screen.getByLabelText(/氏名 \(必須\)/i), {
+    fireEvent.change(screen.getByLabelText(/氏名/i), {
       target: { value: 'テスト 太郎' },
     })
     fireEvent.change(screen.getByLabelText(/生年月日/i), {
