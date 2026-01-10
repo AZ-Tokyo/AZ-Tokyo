@@ -41,9 +41,9 @@ export const CreateUser = () => {
       DeathDate: formData.DeathDate
         ? `${formData.DeathDate}T00:00:00Z`
         : undefined,
-      LegalDomicile: formData.LegalDomicile,
-      LastAddress: formData.LastAddress,
-      Remarks: formData.Remarks,
+      LegalDomicile: formData.LegalDomicile || undefined,
+      LastAddress: formData.LastAddress || undefined,
+      Remarks: formData.Remarks || undefined,
     }
 
     try {
