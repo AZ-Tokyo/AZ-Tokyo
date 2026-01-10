@@ -59,9 +59,9 @@ describe('CreateUser Page', () => {
             Name: 'テスト 太郎',
             BirthDate: '1990-01-01T00:00:00Z',
             DeathDate: undefined,
-            LegalDomicile: '',
-            LastAddress: '',
-            Remarks: '',
+            LegalDomicile: undefined,
+            LastAddress: undefined,
+            Remarks: undefined,
           }),
         }),
       )
