@@ -6,3 +6,21 @@
   --color-secondary: var(--color-light-blue-600);
   --color-tertiary: var(--color-light-blue-1000);
 }
+
+@layer components {
+  .app-header {
+    @apply sticky font-sans top-0 px-8 py-4 z-10 bg-white;
+  }
+
+  .page-main {
+    @apply px-16 py-8 flex flex-col gap-8;
+  }
+
+  .form-card {
+    @apply flex flex-col gap-6 bg-white p-8 border border-gray-100 rounded-2xl shadow-sm;
+  }
+
+  .form-group {
+    @apply flex flex-col gap-2;
+  }
+}

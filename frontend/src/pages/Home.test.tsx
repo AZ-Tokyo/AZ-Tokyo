@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react'
-import App from './App'
+import { MemoryRouter } from 'react-router-dom'
 import { vi } from 'vitest'
+import { Home } from './Home'
 
 const mockUsers = [
   {
@@ -19,7 +20,7 @@ const mockUsers = [
   },
 ]
 
-describe('App Integration', () => {
+describe('Home Page', () => {
   beforeEach(() => {
     vi.stubGlobal(
       'fetch',
@@ -36,18 +37,26 @@ describe('App Integration', () => {
     vi.unstubAllGlobals()
   })
 
-  it('renders the main heading', async () => {
-    render(<App />)
+  it('renders the person list heading', () => {
+    render(
+      <MemoryRouter>
+        <Home />
+      </MemoryRouter>,
+    )
     expect(
       screen.getByRole('heading', {
-        level: 1,
-        name: /デジタル資産相続ツール/i,
+        level: 2,
+        name: /故人一覧/i,
       }),
     ).toBeInTheDocument()
   })
 
   it('renders person cards from fetched data', async () => {
-    render(<App />)
+    render(
+      <MemoryRouter>
+        <Home />
+      </MemoryRouter>,
+    )
 
     await waitFor(() => {
       expect(screen.getByText('山田 太郎')).toBeInTheDocument()
