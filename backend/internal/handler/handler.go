@@ -40,3 +40,18 @@ func (h *Handler) CreateUser(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusCreated, user)
 }
+
+func (h *Handler) UpdateRecord(ctx *gin.Context) {
+	var user model.User
+	if err := ctx.ShouldBindJSON(&user); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	if err := h.UserService.Create(ctx, &user); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update user record"})
+		return
+	}
+
+	ctx.JSON(http.StatusCreated, user)
+}
