@@ -107,7 +107,8 @@ func (s *UserRepositoryTestSuite) TestUpdateRecord_Success() {
 	/* Test Update user1 record */
 	// Copy user1 to user2
 	deathDate2 := time.Date(2019, time.April, 7, 21, 48, 00, 00, jst)
-	user2 := resultUser1
+	user2 := *user1
+	user2.ID = user1.ID
 	user2.Name = "New 42Tokyo"
 	user2.DeathDate = &deathDate2
 
