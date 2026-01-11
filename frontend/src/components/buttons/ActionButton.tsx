@@ -1,8 +1,8 @@
 import { Loader2 } from 'lucide-react'
 import type { ComponentProps } from 'react'
-import { Button, type ButtonVariant } from '../digital-go-jp'
+import { Button } from '../digital-go-jp'
 
-type ActionVariant = Extract<ButtonVariant, 'solid-fill' | 'outline'>
+type ActionVariant = 'solid-fill' | 'outline'
 
 interface ActionButtonProps extends ComponentProps<'button'> {
   variant?: ActionVariant
@@ -17,7 +17,10 @@ export const ActionButton = ({
   disabled = false,
   ...rest
 }: ActionButtonProps) => {
-  const styles = {
+  const styles: Record<
+    ActionVariant,
+    { type: 'submit' | 'button'; extraClass: string }
+  > = {
     'solid-fill': {
       type: 'submit' as const,
       extraClass: 'hover:shadow-lg',

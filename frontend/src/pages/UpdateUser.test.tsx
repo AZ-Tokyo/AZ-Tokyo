@@ -73,7 +73,6 @@ describe('UpdateUser Page', () => {
 
     await waitFor(() => {
       // TODO: Backend API 実装後、fetch が正しい引数で呼ばれたことを確認する
-      // expect(mockFetch).toHaveBeenCalledWith('/api/users/1', expect.objectContaining({ method: 'PUT' }))
       expect(screen.getByText('Home Page')).toBeInTheDocument()
     })
   })
