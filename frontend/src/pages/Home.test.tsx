@@ -37,12 +37,17 @@ describe('Home Page', () => {
     vi.unstubAllGlobals()
   })
 
-  it('renders the person list heading', () => {
+  it('renders the person list heading', async () => {
     render(
       <MemoryRouter>
         <Home />
       </MemoryRouter>,
     )
+
+    await waitFor(() => {
+      expect(screen.getByText('山田 太郎')).toBeInTheDocument()
+    })
+
     expect(
       screen.getByRole('heading', {
         level: 2,

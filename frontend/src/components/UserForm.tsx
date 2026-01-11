@@ -1,10 +1,5 @@
 import { useForm } from 'react-hook-form'
-import {
-  Input,
-  Label,
-  RequirementBadge,
-  Textarea,
-} from './digital-go-jp'
+import { Input, Label, RequirementBadge, Textarea } from './digital-go-jp'
 import type { GormModel, User } from '../types/model'
 import { SubmitButton } from './buttons/SubmitButton'
 
@@ -71,20 +66,12 @@ export const UserForm = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="form-group">
           <Label htmlFor="BirthDate">生年月日</Label>
-          <Input
-            id="BirthDate"
-            type="date"
-            {...register('BirthDate')}
-          />
+          <Input id="BirthDate" type="date" {...register('BirthDate')} />
         </div>
 
         <div className="form-group">
           <Label htmlFor="DeathDate">死亡年月日</Label>
-          <Input
-            id="DeathDate"
-            type="date"
-            {...register('DeathDate')}
-          />
+          <Input id="DeathDate" type="date" {...register('DeathDate')} />
         </div>
       </div>
 
@@ -108,11 +95,7 @@ export const UserForm = ({
 
       <div className="form-group">
         <Label htmlFor="Remarks">備考</Label>
-        <Textarea
-          id="Remarks"
-          rows={4}
-          {...register('Remarks')}
-        />
+        <Textarea id="Remarks" rows={4} {...register('Remarks')} />
       </div>
 
       <div className="flex justify-end pt-4">
