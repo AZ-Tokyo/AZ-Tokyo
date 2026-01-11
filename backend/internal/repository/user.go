@@ -7,6 +7,7 @@ import (
 
 type UserRepository interface {
 	FindAll() ([]model.User, error)
+	FindByID(id uint) (*model.User, error)
 	Create(user *model.User) error
 }
 
@@ -22,6 +23,12 @@ func (r *userRepository) FindAll() ([]model.User, error) {
 	var users []model.User
 	result := r.db.Find(&users)
 	return users, result.Error
+}
+
+func (r *userRepository) FindByID(id uint) (*model.User, error) {
+	var user model.User
+	result := r.db.First(&user, id)
+	return &user, result.Error
 }
 
 func (r *userRepository) Create(user *model.User) error {

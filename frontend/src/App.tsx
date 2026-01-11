@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { CreateUser } from './pages/CreateUser'
 import { Home } from './pages/Home'
+import { UpdateUser } from './pages/UpdateUser'
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/create" element={<CreateUser />} />
+        <Route path="/edit/:id" element={<UpdateUser />} />
       </Routes>
     </BrowserRouter>
   )
