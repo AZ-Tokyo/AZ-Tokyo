@@ -50,9 +50,9 @@ export const UpdateUser = () => {
     <div className="page-main max-w-4xl mx-auto">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-800">編集</h2>
-          <ActionButton variant="outline" onClick={() => navigate('/')}>
-            戻る
-          </ActionButton>
+        <ActionButton variant="outline" onClick={() => navigate('/')}>
+          戻る
+        </ActionButton>
       </div>
 
       <UserForm
