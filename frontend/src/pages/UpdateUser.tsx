@@ -32,6 +32,7 @@ export const UpdateUser = () => {
     setLoading(true)
     try {
       // TODO: Update API call will be implemented here
+      console.log('Submitted data:', data)
       navigate('/')
     } catch (error) {
       console.error('Error updating user:', error)
