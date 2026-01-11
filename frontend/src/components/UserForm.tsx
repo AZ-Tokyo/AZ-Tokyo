@@ -1,10 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  Input,
-  Label,
-  RequirementBadge,
-  Textarea,
-} from './digital-go-jp'
+import { Input, Label, RequirementBadge, Textarea } from './digital-go-jp'
 import type { GormModel, User } from '../types/model'
 import { SubmitButton } from './buttons/SubmitButton'
 

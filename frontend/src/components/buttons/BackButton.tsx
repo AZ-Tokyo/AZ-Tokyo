@@ -6,7 +6,11 @@ interface BackButtonProps {
   children: React.ReactNode
 }
 
-export const BackButton = ({ onClick, className, children }: BackButtonProps) => {
+export const BackButton = ({
+  onClick,
+  className,
+  children,
+}: BackButtonProps) => {
   return (
     <Button
       size="md"
