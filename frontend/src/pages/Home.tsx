@@ -30,6 +30,10 @@ export const Home = () => {
     // TODO: 削除 API を呼び出し、画面から項目を削除する
   }
 
+  const handleEdit = (id: number) => {
+    navigate(`/edit/${id}`)
+  }
+
   const handleCardClick = () => {
     // TODO: 詳細画面などへの遷移
   }
@@ -57,6 +61,7 @@ export const Home = () => {
               key={person.ID}
               person={person}
               onClick={handleCardClick}
+              onEdit={() => handleEdit(person.ID)}
               onDelete={handleDelete}
             />
           ))}
