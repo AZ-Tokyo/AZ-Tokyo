@@ -1,25 +1,25 @@
 import type { ComponentProps } from 'react'
 import { Button } from '../digital-go-jp'
 
-type SubmitButtonProps = ComponentProps<typeof Button> & {
+interface SubmitButtonProps extends ComponentProps<'button'> {
   loading?: boolean
 }
 
 export const SubmitButton = ({
-  loading,
+  loading = false,
   children,
-  className,
-  disabled,
+  className = '',
+  disabled = false,
   ...rest
 }: SubmitButtonProps) => {
   return (
     <Button
+      {...rest}
       type="submit"
       size="lg"
       variant="solid-fill"
       disabled={disabled || loading}
-      className={`rounded-full hover:shadow-lg transition-all ${className ?? ''}`}
-      {...rest}
+      className={`rounded-full hover:shadow-lg transition-all ${className}`}
     >
       {loading ? '処理中...' : children}
     </Button>

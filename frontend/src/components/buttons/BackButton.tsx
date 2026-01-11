@@ -1,22 +1,20 @@
+import type { ComponentProps } from 'react'
 import { Button } from '../digital-go-jp'
 
-interface BackButtonProps {
-  onClick: () => void
-  className?: string
-  children: React.ReactNode
-}
+type BackButtonProps = ComponentProps<'button'>
 
 export const BackButton = ({
-  onClick,
-  className,
   children,
+  className = '',
+  ...rest
 }: BackButtonProps) => {
   return (
     <Button
+      {...rest}
+      type="button"
       size="md"
       variant="outline"
-      className={`rounded-full hover:bg-gray-50 transition-colors ${className ?? ''}`}
-      onClick={onClick}
+      className={`rounded-full hover:bg-gray-50 transition-colors ${className}`}
     >
       {children}
     </Button>

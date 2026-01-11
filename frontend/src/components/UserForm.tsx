@@ -1,5 +1,10 @@
-import { useEffect, useState } from 'react'
-import { Input, Label, RequirementBadge, Textarea } from './digital-go-jp'
+import { useForm } from 'react-hook-form'
+import {
+  Input,
+  Label,
+  RequirementBadge,
+  Textarea,
+} from './digital-go-jp'
 import type { GormModel, User } from '../types/model'
 import { SubmitButton } from './buttons/SubmitButton'
 
@@ -18,56 +23,35 @@ export const UserForm = ({
   submitLabel,
   loading = false,
 }: UserFormProps) => {
-  const [formData, setFormData] = useState<UserFormData>({
-    Name: '',
-    BirthDate: '',
-    DeathDate: '',
-    LegalDomicile: '',
-    LastAddress: '',
-    Remarks: '',
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<UserFormData>({
+    defaultValues: {
+      Name: initialData?.Name || '',
+      BirthDate: initialData?.BirthDate?.split('T')[0] || '',
+      DeathDate: initialData?.DeathDate?.split('T')[0] || '',
+      LegalDomicile: initialData?.LegalDomicile || '',
+      LastAddress: initialData?.LastAddress || '',
+      Remarks: initialData?.Remarks || '',
+    },
   })
 
-  useEffect(() => {
-    if (initialData) {
-      setFormData({
-        Name: initialData.Name || '',
-        BirthDate: initialData.BirthDate?.split('T')[0] || '',
-        DeathDate: initialData.DeathDate?.split('T')[0] || '',
-        LegalDomicile: initialData.LegalDomicile || '',
-        LastAddress: initialData.LastAddress || '',
-        Remarks: initialData.Remarks || '',
-      })
-    }
-  }, [initialData])
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target
-    setFormData((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-
-    // 送信時に空文字を undefined に変換して backend の型定義に合わせる
+  const onFormSubmit = (data: UserFormData) => {
     const payload: UserFormData = {
-      Name: formData.Name,
-      BirthDate: formData.BirthDate
-        ? `${formData.BirthDate}T00:00:00Z`
-        : undefined,
-      DeathDate: formData.DeathDate
-        ? `${formData.DeathDate}T00:00:00Z`
-        : undefined,
-      LegalDomicile: formData.LegalDomicile || undefined,
-      LastAddress: formData.LastAddress || undefined,
-      Remarks: formData.Remarks || undefined,
+      Name: data.Name,
+      BirthDate: data.BirthDate ? `${data.BirthDate}T00:00:00Z` : undefined,
+      DeathDate: data.DeathDate ? `${data.DeathDate}T00:00:00Z` : undefined,
+      LegalDomicile: data.LegalDomicile || undefined,
+      LastAddress: data.LastAddress || undefined,
+      Remarks: data.Remarks || undefined,
     }
     onSubmit(payload)
   }
 
   return (
-    <form onSubmit={handleSubmit} className="form-card">
+    <form onSubmit={handleSubmit(onFormSubmit)} className="form-card">
       <div className="form-group">
         <Label htmlFor="Name">
           氏名
@@ -75,12 +59,13 @@ export const UserForm = ({
         </Label>
         <Input
           id="Name"
-          name="Name"
-          value={formData.Name}
-          onChange={handleChange}
-          required
           placeholder="例: 山田 太郎"
+          isError={!!errors.Name}
+          {...register('Name', { required: '氏名は必須です' })}
         />
+        {errors.Name && (
+          <p className="text-red-600 text-sm">{errors.Name.message}</p>
+        )}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -88,10 +73,8 @@ export const UserForm = ({
           <Label htmlFor="BirthDate">生年月日</Label>
           <Input
             id="BirthDate"
-            name="BirthDate"
             type="date"
-            value={formData.BirthDate}
-            onChange={handleChange}
+            {...register('BirthDate')}
           />
         </div>
 
@@ -99,10 +82,8 @@ export const UserForm = ({
           <Label htmlFor="DeathDate">死亡年月日</Label>
           <Input
             id="DeathDate"
-            name="DeathDate"
             type="date"
-            value={formData.DeathDate}
-            onChange={handleChange}
+            {...register('DeathDate')}
           />
         </div>
       </div>
@@ -111,10 +92,8 @@ export const UserForm = ({
         <Label htmlFor="LegalDomicile">本籍</Label>
         <Input
           id="LegalDomicile"
-          name="LegalDomicile"
-          value={formData.LegalDomicile}
-          onChange={handleChange}
           placeholder="例: 東京都千代田区..."
+          {...register('LegalDomicile')}
         />
       </div>
 
@@ -122,10 +101,8 @@ export const UserForm = ({
         <Label htmlFor="LastAddress">最後の住所</Label>
         <Input
           id="LastAddress"
-          name="LastAddress"
-          value={formData.LastAddress}
-          onChange={handleChange}
           placeholder="例: 東京都新宿区..."
+          {...register('LastAddress')}
         />
       </div>
 
@@ -133,10 +110,8 @@ export const UserForm = ({
         <Label htmlFor="Remarks">備考</Label>
         <Textarea
           id="Remarks"
-          name="Remarks"
-          value={formData.Remarks}
-          onChange={handleChange}
           rows={4}
+          {...register('Remarks')}
         />
       </div>
 
