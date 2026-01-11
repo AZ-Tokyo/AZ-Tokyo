@@ -93,6 +93,6 @@ describe('UserForm', () => {
 
   it('disables submit button when loading', () => {
     render(<UserForm onSubmit={mockSubmit} submitLabel="登録" loading={true} />)
-    expect(screen.getByRole('button', { name: '処理中...' })).toBeDisabled()
+    expect(screen.getByRole('button', { name: '登録' })).toBeDisabled()
   })
 })

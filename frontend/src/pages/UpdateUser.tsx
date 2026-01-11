@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { BackButton } from '../components/buttons/BackButton'
+import { ActionButton } from '../components/buttons/ActionButton'
 import { UserForm, type UserFormData } from '../components/UserForm'
 import { getUser } from '../services/api'
 
@@ -50,7 +50,9 @@ export const UpdateUser = () => {
     <div className="page-main max-w-4xl mx-auto">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-800">編集</h2>
-        <BackButton onClick={() => navigate('/')}>戻る</BackButton>
+          <ActionButton variant="outline" onClick={() => navigate('/')}>
+            戻る
+          </ActionButton>
       </div>
 
       <UserForm
