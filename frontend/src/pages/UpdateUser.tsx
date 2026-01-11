@@ -32,9 +32,7 @@ export const UpdateUser = () => {
     setLoading(true)
     try {
       // TODO: Update API call will be implemented here
-      console.log('Update data:', data)
-      alert('更新機能は未実装です')
-      // navigate('/')
+      navigate('/')
     } catch (error) {
       console.error('Error updating user:', error)
       alert('更新に失敗しました')
