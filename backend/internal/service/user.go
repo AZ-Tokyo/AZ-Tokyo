@@ -7,6 +7,7 @@ import (
 
 type UserService interface {
 	FindAll() ([]model.User, error)
+	FindByID(id uint) (*model.User, error)
 	Create(user *model.User) error
 }
 
@@ -20,6 +21,10 @@ func NewUserService(repo repository.UserRepository) UserService {
 
 func (s *userService) FindAll() ([]model.User, error) {
 	return s.repo.FindAll()
+}
+
+func (s *userService) FindByID(id uint) (*model.User, error) {
+	return s.repo.FindByID(id)
 }
 
 func (s *userService) Create(user *model.User) error {

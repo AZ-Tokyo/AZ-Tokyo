@@ -8,6 +8,7 @@ import (
 func Setup(h *handler.Handler) *gin.Engine {
 	router := gin.Default()
 	router.GET("/api/users", h.GetAllUsers)
+	router.GET("/api/users/:id", h.GetUser)
 	router.POST("/api/users", h.CreateUser)
 	return router
 }

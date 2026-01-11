@@ -44,6 +44,24 @@ func (s *UserRepositoryTestSuite) TestFindAll_Empty() {
 	s.Len(users, 0)
 }
 
+func (s *UserRepositoryTestSuite) TestFindByID_Success() {
+	user := &model.User{Name: "Target User"}
+	s.db.Create(user)
+
+	foundUser, err := s.repo.FindByID(user.ID)
+
+	s.NoError(err)
+	s.NotNil(foundUser)
+	s.Equal(user.ID, foundUser.ID)
+	s.Equal("Target User", foundUser.Name)
+}
+
+func (s *UserRepositoryTestSuite) TestFindByID_NotFound() {
+	_, err := s.repo.FindByID(999)
+
+	s.Error(err)
+}
+
 func (s *UserRepositoryTestSuite) TestCreate_Success() {
 	user := &model.User{Name: "Yamada"}
 
